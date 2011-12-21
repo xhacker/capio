@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1ABF475D145E3CB500ED9E28 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF475C145E3CB500ED9E28 /* main.cpp */; };
-		1ABF475F145E3CB500ED9E28 /* Capio.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1ABF475E145E3CB500ED9E28 /* Capio.1 */; };
+		1ABF4772145E3D2400ED9E28 /* capio.cc in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF476B145E3D2400ED9E28 /* capio.cc */; };
+		1ABF4773145E3D2400ED9E28 /* command.cc in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF476D145E3D2400ED9E28 /* command.cc */; };
+		1ABF4774145E3D2400ED9E28 /* common.cc in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF476E145E3D2400ED9E28 /* common.cc */; };
+		1ABF4775145E3D2400ED9E28 /* io.cc in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF476F145E3D2400ED9E28 /* io.cc */; };
+		1ABF4776145E3D2400ED9E28 /* variable.cc in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF4771145E3D2400ED9E28 /* variable.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,16 +21,22 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				1ABF475F145E3CB500ED9E28 /* Capio.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1A8CDAA414A1E9F5000F8112 /* io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io.h; sourceTree = "<group>"; };
+		1A8CDAA614A1EB14000F8112 /* variable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = variable.h; sourceTree = "<group>"; };
+		1A8CDAA714A1EB97000F8112 /* command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = command.h; sourceTree = "<group>"; };
 		1ABF4758145E3CB500ED9E28 /* Capio */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Capio; sourceTree = BUILT_PRODUCTS_DIR; };
-		1ABF475C145E3CB500ED9E28 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		1ABF475E145E3CB500ED9E28 /* Capio.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Capio.1; sourceTree = "<group>"; };
+		1ABF476B145E3D2400ED9E28 /* capio.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = capio.cc; sourceTree = "<group>"; };
+		1ABF476C145E3D2400ED9E28 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		1ABF476D145E3D2400ED9E28 /* command.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = command.cc; sourceTree = "<group>"; };
+		1ABF476E145E3D2400ED9E28 /* common.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = common.cc; sourceTree = "<group>"; };
+		1ABF476F145E3D2400ED9E28 /* io.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = io.cc; sourceTree = "<group>"; };
+		1ABF4771145E3D2400ED9E28 /* variable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = variable.cc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +69,15 @@
 		1ABF475B145E3CB500ED9E28 /* Capio */ = {
 			isa = PBXGroup;
 			children = (
-				1ABF475C145E3CB500ED9E28 /* main.cpp */,
-				1ABF475E145E3CB500ED9E28 /* Capio.1 */,
+				1ABF476B145E3D2400ED9E28 /* capio.cc */,
+				1ABF476D145E3D2400ED9E28 /* command.cc */,
+				1A8CDAA714A1EB97000F8112 /* command.h */,
+				1ABF476E145E3D2400ED9E28 /* common.cc */,
+				1ABF476C145E3D2400ED9E28 /* common.h */,
+				1ABF476F145E3D2400ED9E28 /* io.cc */,
+				1A8CDAA414A1E9F5000F8112 /* io.h */,
+				1ABF4771145E3D2400ED9E28 /* variable.cc */,
+				1A8CDAA614A1EB14000F8112 /* variable.h */,
 			);
 			path = Capio;
 			sourceTree = "<group>";
@@ -91,6 +107,9 @@
 /* Begin PBXProject section */
 		1ABF474F145E3CB500ED9E28 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = 1ABF4752145E3CB500ED9E28 /* Build configuration list for PBXProject "Capio" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -113,7 +132,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1ABF475D145E3CB500ED9E28 /* main.cpp in Sources */,
+				1ABF4772145E3D2400ED9E28 /* capio.cc in Sources */,
+				1ABF4773145E3D2400ED9E28 /* command.cc in Sources */,
+				1ABF4774145E3D2400ED9E28 /* common.cc in Sources */,
+				1ABF4775145E3D2400ED9E28 /* io.cc in Sources */,
+				1ABF4776145E3D2400ED9E28 /* variable.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +221,7 @@
 				1ABF4764145E3CB500ED9E28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
