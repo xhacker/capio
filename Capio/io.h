@@ -4,6 +4,8 @@
 using namespace std;
 
 string get_input();
+void rollback_input();
+
 void print_log(string);
 void print_error(string);
 void print_info(string);

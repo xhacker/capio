@@ -11,6 +11,7 @@ typedef pair<string, type_of_command_function> type_of_command;
 typedef map<string, type_of_command_function> type_of_command_map;
 
 void init_command();
+type_of_command_function find_command(string command);
 
 void main_processor();
 type_of_return MAKE_processor();

@@ -4,6 +4,7 @@
 #include "io.h"
 #include "common.h"
 #include "variable.h"
+#include "calculate.h"
 
 using namespace std;
 
@@ -15,6 +16,17 @@ void init_command()
     map_of_builtin_command.insert(type_of_command("THING", THING_processor));
     map_of_builtin_command.insert(type_of_command("PRINT", PRINT_processor));
     map_of_builtin_command.insert(type_of_command("READLIST", READLIST_processor));
+}
+
+type_of_command_function find_command(string command)
+{
+    type_of_command_map::iterator it;
+    it = map_of_builtin_command.find(command);
+    if (it == map_of_builtin_command.end())
+    {
+        return NULL;
+    }
+    return it->second;
 }
 
 type_of_return get_word()
@@ -129,33 +141,12 @@ type_of_return get_value()
         ret.first = STATE_ERROR;
         ret.second = "]";
     }
-    else if (is_number(command))
-    {
-        ret.first = STATE_OK;
-        ret.second = command;
-    }
     else
     {
-        type_of_command_map::iterator it;
-        it = map_of_builtin_command.find(command);
-        if (it == map_of_builtin_command.end())
-        {
-            ret.first = STATE_ERROR;
-        }
-        else
-        {
-            type_of_return command_ret = (*(it->second))();
-            if (command_ret.first == STATE_OK_WITH_VALUE)
-            {
-                ret.first = STATE_OK;
-                ret.second = command_ret.second;
-            }
-            else
-            {
-                ret.first = STATE_ERROR;
-            }
-        }
+        rollback_input();
+        ret = calc();
     }
+
     return ret;
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A8CDAA914A20309000F8112 /* calculate.cc in Sources */ = {isa = PBXBuildFile; fileRef = 1A8CDAA814A20309000F8112 /* calculate.cc */; };
 		1ABF4772145E3D2400ED9E28 /* capio.cc in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF476B145E3D2400ED9E28 /* capio.cc */; };
 		1ABF4773145E3D2400ED9E28 /* command.cc in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF476D145E3D2400ED9E28 /* command.cc */; };
 		1ABF4774145E3D2400ED9E28 /* common.cc in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF476E145E3D2400ED9E28 /* common.cc */; };
@@ -30,6 +31,8 @@
 		1A8CDAA414A1E9F5000F8112 /* io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io.h; sourceTree = "<group>"; };
 		1A8CDAA614A1EB14000F8112 /* variable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = variable.h; sourceTree = "<group>"; };
 		1A8CDAA714A1EB97000F8112 /* command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = command.h; sourceTree = "<group>"; };
+		1A8CDAA814A20309000F8112 /* calculate.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = calculate.cc; sourceTree = "<group>"; };
+		1A8CDAAA14A2033A000F8112 /* calculate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calculate.h; sourceTree = "<group>"; };
 		1ABF4758145E3CB500ED9E28 /* Capio */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Capio; sourceTree = BUILT_PRODUCTS_DIR; };
 		1ABF476B145E3D2400ED9E28 /* capio.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = capio.cc; sourceTree = "<group>"; };
 		1ABF476C145E3D2400ED9E28 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
@@ -69,6 +72,8 @@
 		1ABF475B145E3CB500ED9E28 /* Capio */ = {
 			isa = PBXGroup;
 			children = (
+				1A8CDAA814A20309000F8112 /* calculate.cc */,
+				1A8CDAAA14A2033A000F8112 /* calculate.h */,
 				1ABF476B145E3D2400ED9E28 /* capio.cc */,
 				1ABF476D145E3D2400ED9E28 /* command.cc */,
 				1A8CDAA714A1EB97000F8112 /* command.h */,
@@ -137,6 +142,7 @@
 				1ABF4774145E3D2400ED9E28 /* common.cc in Sources */,
 				1ABF4775145E3D2400ED9E28 /* io.cc in Sources */,
 				1ABF4776145E3D2400ED9E28 /* variable.cc in Sources */,
+				1A8CDAA914A20309000F8112 /* calculate.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

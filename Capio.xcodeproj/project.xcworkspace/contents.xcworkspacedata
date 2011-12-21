@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../Capio/calculate.h">
+   </FileRef>
+   <FileRef
+      location = "group:../Capio/calculate.cc">
+   </FileRef>
+   <FileRef
       location = "group:../Capio/command.h">
    </FileRef>
    <FileRef
