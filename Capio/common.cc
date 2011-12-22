@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <cctype>
 #include "common.h"
 
@@ -33,4 +34,11 @@ bool is_number(string str)
     }
     
     return ret;
+}
+
+string int_to_string(int number)
+{
+    stringstream ss;
+    ss << number;
+    return ss.str();
 }

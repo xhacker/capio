@@ -3,9 +3,10 @@
 
 using namespace std;
 
-#define INFINITY 0x7fffffff
+#define INF 0x7fffffff
 
 bool is_number(string);
+string int_to_string(int);
 
 typedef int type_of_state;
 typedef pair<type_of_state, string> type_of_return;

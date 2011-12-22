@@ -37,7 +37,7 @@ void rollback_input()
 void print_error(string message)
 {
     cout << "[ERROR] " << message << endl;
-    cin.ignore(INFINITY, '\n');
+    cin.ignore(INF, '\n');
 }
 
 void print_log(string message)

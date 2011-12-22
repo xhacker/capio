@@ -1,5 +1,7 @@
 #include <iostream>
 #include <map>
+#include <cmath>
+#include <cstdlib>
 #include "command.h"
 #include "io.h"
 #include "common.h"
@@ -16,6 +18,12 @@ void init_command()
     map_of_builtin_command.insert(type_of_command("THING", THING_processor));
     map_of_builtin_command.insert(type_of_command("PRINT", PRINT_processor));
     map_of_builtin_command.insert(type_of_command("READLIST", READLIST_processor));
+    map_of_builtin_command.insert(type_of_command("AND", AND_processor));
+    map_of_builtin_command.insert(type_of_command("OR", OR_processor));
+    map_of_builtin_command.insert(type_of_command("NOT", NOT_processor));
+    map_of_builtin_command.insert(type_of_command("IF", IF_processor));
+    map_of_builtin_command.insert(type_of_command("REPEAT", REPEAT_processor));
+    map_of_builtin_command.insert(type_of_command("RANDOM", RANDOM_processor));
 }
 
 type_of_command_function find_command(string command)
@@ -94,6 +102,28 @@ type_of_return get_list()
     return ret;
 }
 
+// TODO
+type_of_return get_number()
+{
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    ret = get_value();
+    if (ret.first == STATE_OK)
+    {
+        if (!is_number(ret.second))
+        {
+            ret.first = STATE_ERROR;
+        }
+    }
+    return ret;
+}
+
+// TODO
+type_of_return get_bool()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
 type_of_return get_value()
 {
     string command = get_input();
@@ -148,6 +178,42 @@ type_of_return get_value()
     }
 
     return ret;
+}
+
+void main_processor()
+{
+    string stop_flag = "";
+    string start_flag = "";
+    start_flag = get_input();
+    if (start_flag == "[")
+    {
+        stop_flag = "]";
+    }
+    else
+    {
+        rollback_input();
+    }
+    
+    while (true)
+    {
+        string command = get_input();
+        
+        if (command == stop_flag)
+        {
+            break;
+        }
+        
+        type_of_command_map::iterator it;
+        it = map_of_builtin_command.find(command);
+        if (it == map_of_builtin_command.end())
+        {
+            print_error("\"" + command + "\" is not a valid command.");
+        }
+        else
+        {
+            (*(it->second))();
+        }
+    }
 }
 
 type_of_return MAKE_processor()
@@ -290,6 +356,60 @@ type_of_return READLIST_processor()
     else
     {
         print_error("\"READLIST\": Invalid argument, should be a list.");
+        ret.first = STATE_ERROR;
+    }
+    return ret;
+}
+
+// TODO
+type_of_return AND_processor()
+{
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    return ret;
+}
+
+// TODO
+type_of_return OR_processor()
+{
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    return ret;
+}
+
+// TODO
+type_of_return NOT_processor()
+{
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    return ret;
+}
+
+// TODO
+type_of_return IF_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return REPEAT_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return RANDOM_processor()
+{
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_number();
+    if (argument_ret.first == STATE_OK) {
+        ret.first = STATE_OK_WITH_VALUE;
+        int rand_max = (int)floor(atof(argument_ret.second.c_str()));
+        int rand_num = rand() % rand_max;
+        ret.second = int_to_string(rand_num);
+    }
+    else
+    {
+        print_error("\"RAMDOM\": Invalid argument, should be a number.");
         ret.first = STATE_ERROR;
     }
     return ret;

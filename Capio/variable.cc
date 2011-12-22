@@ -1,5 +1,7 @@
 #include <iostream>
 #include <map>
+#include <ctime>
+#include <cstdlib>
 #include "common.h"
 #include "variable.h"
 
@@ -9,6 +11,7 @@ type_of_variable_map map_of_variable;
 
 void init_variable()
 {
+    srand((unsigned)time(NULL));
 }
 
 void set_variable(string name, string value)
