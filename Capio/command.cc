@@ -27,6 +27,10 @@ void init_command()
     map_of_builtin_command.insert(type_of_command("SQRT", SQRT_processor));
     map_of_builtin_command.insert(type_of_command("INT", INT_processor));
     map_of_builtin_command.insert(type_of_command("WAIT", WAIT_processor));
+    
+    /* aliases */
+    map_of_builtin_command.insert(type_of_command("RAND", RANDOM_processor));
+    map_of_builtin_command.insert(type_of_command("SLEEP", WAIT_processor));
 }
 
 type_of_command_function find_command(string command)
