@@ -26,6 +26,7 @@ void init_command()
     map_of_builtin_command.insert(type_of_command("RANDOM", RANDOM_processor));
     map_of_builtin_command.insert(type_of_command("SQRT", SQRT_processor));
     map_of_builtin_command.insert(type_of_command("INT", INT_processor));
+    map_of_builtin_command.insert(type_of_command("SLEEP", SLEEP_processor));
 }
 
 type_of_command_function find_command(string command)
@@ -404,7 +405,7 @@ type_of_return RANDOM_processor()
     type_of_return argument_ret = get_number();
     if (argument_ret.first == STATE_OK) {
         ret.first = STATE_OK_WITH_VALUE;
-        int rand_max = (int)floor(atof(argument_ret.second.c_str()));
+        int rand_max = (int)atof(argument_ret.second.c_str());
         int rand_num = rand() % rand_max;
         ret.second = num_to_string(rand_num);
     }
@@ -440,12 +441,31 @@ type_of_return INT_processor()
     type_of_return argument_ret = get_number();
     if (argument_ret.first == STATE_OK) {
         ret.first = STATE_OK_WITH_VALUE;
-        int number = (int)floor(atof(argument_ret.second.c_str()));
+        int number = (int)atof(argument_ret.second.c_str());
         ret.second = num_to_string(number);
     }
     else
     {
         print_error("\"INT\": Invalid argument, should be a number.");
+        ret.first = STATE_ERROR;
+    }
+    return ret;
+}
+
+type_of_return SLEEP_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    type_of_return argument_ret = get_number();
+    if (argument_ret.first == STATE_OK) {
+        ret.first = STATE_OK;
+        /* 1 microsecond equals to 1x10E-6 second. */
+        int ms = (int)atof(argument_ret.second.c_str());
+        print_log("SLEEP: " + num_to_string(ms) + " ms.");
+        usleep(ms);
+    }
+    else
+    {
+        print_error("\"SLEEP\": Invalid argument, should be a number.");
         ret.first = STATE_ERROR;
     }
     return ret;

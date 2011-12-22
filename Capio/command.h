@@ -32,5 +32,6 @@ type_of_return REPEAT_processor();
 type_of_return RANDOM_processor();
 type_of_return SQRT_processor();
 type_of_return INT_processor();
+type_of_return SLEEP_processor();
 
 #endif
