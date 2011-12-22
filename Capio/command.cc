@@ -24,6 +24,8 @@ void init_command()
     map_of_builtin_command.insert(type_of_command("IF", IF_processor));
     map_of_builtin_command.insert(type_of_command("REPEAT", REPEAT_processor));
     map_of_builtin_command.insert(type_of_command("RANDOM", RANDOM_processor));
+    map_of_builtin_command.insert(type_of_command("SQRT", SQRT_processor));
+    map_of_builtin_command.insert(type_of_command("INT", INT_processor));
 }
 
 type_of_command_function find_command(string command)
@@ -396,7 +398,6 @@ type_of_return REPEAT_processor()
     return ret;
 }
 
-// TODO
 type_of_return RANDOM_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
@@ -405,7 +406,7 @@ type_of_return RANDOM_processor()
         ret.first = STATE_OK_WITH_VALUE;
         int rand_max = (int)floor(atof(argument_ret.second.c_str()));
         int rand_num = rand() % rand_max;
-        ret.second = int_to_string(rand_num);
+        ret.second = num_to_string(rand_num);
     }
     else
     {
@@ -414,3 +415,38 @@ type_of_return RANDOM_processor()
     }
     return ret;
 }
+
+// TODO
+type_of_return SQRT_processor()
+{
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_number();
+    if (argument_ret.first == STATE_OK) {
+        ret.first = STATE_OK_WITH_VALUE;
+        double number = atof(argument_ret.second.c_str());
+        double sqrted = sqrt(number);
+        ret.second = num_to_string(sqrted);
+    }
+    else
+    {
+        print_error("\"SQRT\": Invalid argument, should be a number.");
+        ret.first = STATE_ERROR;
+    }
+    return ret;
+}
+
+// TODO
+type_of_return INT_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+/*
+// TODO
+type_of_return VOID_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+*/

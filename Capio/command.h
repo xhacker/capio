@@ -30,5 +30,7 @@ type_of_return NOT_processor();
 type_of_return IF_processor();
 type_of_return REPEAT_processor();
 type_of_return RANDOM_processor();
+type_of_return SQRT_processor();
+type_of_return INT_processor();
 
 #endif

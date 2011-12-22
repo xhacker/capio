@@ -6,7 +6,8 @@ using namespace std;
 #define INF 0x7fffffff
 
 bool is_number(string);
-string int_to_string(int);
+string num_to_string(int);
+string num_to_string(double);
 
 typedef int type_of_state;
 typedef pair<type_of_state, string> type_of_return;

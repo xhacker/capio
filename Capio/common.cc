@@ -36,7 +36,14 @@ bool is_number(string str)
     return ret;
 }
 
-string int_to_string(int number)
+string num_to_string(int number)
+{
+    stringstream ss;
+    ss << number;
+    return ss.str();
+}
+
+string num_to_string(double number)
 {
     stringstream ss;
     ss << number;
