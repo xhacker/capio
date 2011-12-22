@@ -416,7 +416,6 @@ type_of_return RANDOM_processor()
     return ret;
 }
 
-// TODO
 type_of_return SQRT_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
@@ -435,10 +434,20 @@ type_of_return SQRT_processor()
     return ret;
 }
 
-// TODO
 type_of_return INT_processor()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_number();
+    if (argument_ret.first == STATE_OK) {
+        ret.first = STATE_OK_WITH_VALUE;
+        int number = (int)floor(atof(argument_ret.second.c_str()));
+        ret.second = num_to_string(number);
+    }
+    else
+    {
+        print_error("\"INT\": Invalid argument, should be a number.");
+        ret.first = STATE_ERROR;
+    }
     return ret;
 }
 
