@@ -5,33 +5,33 @@
 #include "command.h"
 #include "io.h"
 
-int is_operator(string str)
+int is_operator(string op)
 {
-    if (str == "+")
+    if (op == "+")
     {
         return OP_ADD;
     }
-    else if (str == "-")
+    else if (op == "-")
     {
         return OP_MINUS;
     }
-    else if (str == "*")
+    else if (op == "*")
     {
         return OP_MULTI;
     }
-    else if (str == "/")
+    else if (op == "/")
     {
         return OP_DIVIDE;
     }
-    else if (str == "=")
+    else if (op == "=")
     {
         return OP_EQUAL;
     }
-    else if (str == "<")
+    else if (op == "<")
     {
         return OP_LESS;
     }
-    else if (str == ">")
+    else if (op == ">")
     {
         return OP_MORE;
     }
@@ -42,17 +42,57 @@ int is_operator(string str)
     return NOT_OP;
 }
 
+int is_parenthesis(string op)
+{
+    if (op == "(")
+    {
+        return PARENTHESIS_L;
+    }
+    else if (op == ")")
+    {
+        return PARENTHESIS_R;
+    }
+    else
+    {
+        return NOT_PARENTHESIS;
+    }
+    return NOT_PARENTHESIS;
+}
+
 type_of_return calc()
 {
     type_of_return ret(STATE_OK, "");
     
     vector<string> elem_list;
+    int parenthesis_l = 0;
     while (true)
     {
         string elem = get_input();
+        int parenthesis_test = is_parenthesis(elem);
         if (is_number(elem))
         {
             elem_list.push_back(elem);
+        }
+        else if (parenthesis_test)
+        {
+            elem_list.push_back(elem);
+            if (parenthesis_test == PARENTHESIS_L)
+            {
+                ++parenthesis_l;
+                continue;
+            }
+            else if (parenthesis_test == PARENTHESIS_R)
+            {
+                if (parenthesis_l > 0)
+                {
+                    --parenthesis_l;
+                }
+                else
+                {
+                    ret.first = STATE_ERROR;
+                    return ret;
+                }
+            }
         }
         else
         {
@@ -78,15 +118,24 @@ type_of_return calc()
         }
  
         string op = get_input();
-        if (!is_operator(op))
+        if (is_parenthesis(op)) {
+            rollback_input();
+        }
+        else if (is_operator(op))
+        {
+            elem_list.push_back(op);
+        }
+        else
         {
             rollback_input();
             break;
         }
-        else
-        {
-            elem_list.push_back(op);
-        }
+    }
+    
+    if (parenthesis_l)
+    {
+        ret.first = STATE_ERROR;
+        return ret;
     }
     
     ret = calc_list(elem_list);
@@ -111,6 +160,13 @@ type_of_return calc_list(vector<string> list, int start, int end)
         return ret;
     }
     
+    if (is_parenthesis(list[start]) == PARENTHESIS_L &&
+        find_parenthesis_r(list, start) == end)
+    {
+        ret = calc_list(list, start + 1, end - 1);
+        return ret;
+    }
+    
     int lowest = INF;
     int lowest_i = -1;
     for (int i = start; i <= end; ++i)
@@ -122,6 +178,12 @@ type_of_return calc_list(vector<string> list, int start, int end)
                 lowest = op_test;
                 lowest_i = i;
             }
+        }
+        int parenthesis_test = is_parenthesis(list[i]);
+        if (parenthesis_test)
+        {
+            int r = find_parenthesis_r(list, i);
+            i = r;
         }
     }
     
@@ -173,4 +235,28 @@ string do_operate(type_of_return a, string op, type_of_return b)
     }
     
     return result;
+}
+
+int find_parenthesis_r(vector<string> list, int left)
+{
+    int parenthesis_l = 1;
+    int i, r;
+    for (i = left + 1; ; ++i)
+    {
+        int parenthesis_test = is_parenthesis(list[i]);
+        if (parenthesis_test == PARENTHESIS_L)
+        {
+            ++parenthesis_l;
+        }
+        else if (parenthesis_test == PARENTHESIS_R)
+        {
+            --parenthesis_l;
+        }
+        if (parenthesis_l == 0)
+        {
+            r = i;
+            break;
+        }
+    }
+    return r;
 }

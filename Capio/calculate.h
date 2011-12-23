@@ -14,10 +14,16 @@
 #define OP_MULTI    23
 #define OP_DIVIDE   24
 
+#define NOT_PARENTHESIS 0
+#define PARENTHESIS_L   1
+#define PARENTHESIS_R   2
+
 int is_operator(string);
+int is_parenthesis(string);
 type_of_return calc();
 type_of_return calc_list(vector<string>);
 type_of_return calc_list(vector<string>, int, int);
 string do_operate(type_of_return, string, type_of_return);
+int find_parenthesis_r(vector<string>, int);
 
 #endif

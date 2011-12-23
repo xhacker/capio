@@ -212,6 +212,7 @@ void main_processor()
             break;
         }
         
+        // TODO: use find_command istead
         type_of_command_map::iterator it;
         it = map_of_builtin_command.find(command);
         if (it == map_of_builtin_command.end())

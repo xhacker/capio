@@ -1,17 +1,29 @@
 
 # Calculation
 
+## Priority
+
 PRINT 3 + 5 * 2 - 4 / 3 + 3 ;
 = 14.6667
 
 PRINT 3 + 5 * 2 - 4 / 3 + 3 > 300 ;
 = FALSE
 
+## With Variable
+
 MAKE "A 200
 MAKE "B 100
 MAKE "B THING "B + 50.5 * 2
 PRINT THING "A + 50 / 50 = THING "B ;
 = TRUE
+
+## With Parentheses
+
+PRINT 5 * ( 3 + 3 ) ;
+= 30
+
+PRINT ( 2 + 3 ) * ( ( 4 + 5 ) - 8 ) ;
+= 5
 
 
 # Variable
@@ -20,3 +32,7 @@ MAKE "A 100 ;
 MAKE "B THING "A + 100 ;
 PRINT THING "B ;
 = 200
+
+MAKE "C "miao
+PRINT THING "C ;
+= miao
