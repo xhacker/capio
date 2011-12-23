@@ -23,6 +23,18 @@ int is_operator(string str)
     {
         return OP_DIVIDE;
     }
+    else if (str == "=")
+    {
+        return OP_EQUAL;
+    }
+    else if (str == "<")
+    {
+        return OP_LESS;
+    }
+    else if (str == ">")
+    {
+        return OP_MORE;
+    }
     else
     {
         return NOT_OP;
@@ -125,28 +137,40 @@ string do_operate(type_of_return a, string op, type_of_return b)
     /* calculate `a op b` */
     double aval = atof(a.second.c_str());
     double bval = atof(b.second.c_str());
-    double result = 0;
+    string result = "";
     
     if (op == "+")
     {
-        result = aval + bval;
+        result = num_to_string(aval + bval);
     }
     else if (op == "-")
     {
-        result = aval - bval;
+        result = num_to_string(aval - bval);
     }
     else if (op == "*")
     {
-        result = aval * bval;
+        result = num_to_string(aval * bval);
     }
     else if (op == "/")
     {
-        result = aval / bval;
+        result = num_to_string(aval / bval);
+    }
+    else if (op == "=")
+    {
+        result = (aval == bval) ? "TRUE" : "FALSE";
+    }
+    else if (op == "<")
+    {
+        result = (aval < bval) ? "TRUE" : "FALSE";
+    }
+    else if (op == ">")
+    {
+        result = (aval > bval) ? "TRUE" : "FALSE";
     }
     else
     {
         ;
     }
     
-    return num_to_string(result);
+    return result;
 }
