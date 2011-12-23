@@ -253,7 +253,7 @@ type_of_return MAKE_processor()
     }
 
     type_of_return second_argument_ret = get_value();
-    if (second_argument_ret.first == STATE_OK)
+    if (second_argument_ret.first == STATE_OK_WITH_VALUE)
     {
         value = second_argument_ret.second;
     }
@@ -286,7 +286,7 @@ type_of_return THING_processor()
 
     type_of_return argument_ret = get_value();
     string value = "";
-    if (argument_ret.first == STATE_OK)
+    if (argument_ret.first == STATE_OK_WITH_VALUE)
     {
         value = argument_ret.second;
     }
