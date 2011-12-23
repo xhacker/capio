@@ -31,6 +31,9 @@ void init_command()
     /* aliases */
     map_of_builtin_command.insert(type_of_command("RAND", RANDOM_processor));
     map_of_builtin_command.insert(type_of_command("SLEEP", WAIT_processor));
+    
+    /* misc */
+    map_of_builtin_command.insert(type_of_command(";", SEPARATOR_processor));
 }
 
 type_of_command_function find_command(string command)
@@ -109,7 +112,6 @@ type_of_return get_list()
     return ret;
 }
 
-// TODO
 type_of_return get_number()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
@@ -134,7 +136,7 @@ type_of_return get_bool()
 type_of_return get_value()
 {
     string command = get_input();
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
 
     if (command == "")
     {
@@ -142,16 +144,16 @@ type_of_return get_value()
     }
     else if (command[0] == '"')
     {
-        ret.first = STATE_OK;
+        ret.first = STATE_OK_WITH_VALUE;
         ret.second = command.substr(1);
     }
     else if (command == "[")
     {
         ret.second = "[";
-        type_of_return list_item(STATE_OK, "");
+        type_of_return list_item(STATE_OK_WITH_VALUE, "");
         while (true) {
             list_item = get_value();
-            if (list_item.first == STATE_OK) {
+            if (list_item.first == STATE_OK_WITH_VALUE) {
                 ret.second += (" " + list_item.second);
             }
             else if (list_item.first == STATE_ERROR)
@@ -326,7 +328,7 @@ type_of_return PRINT_processor()
     type_of_return ret(STATE_OK, "");
     type_of_return argument_ret = get_value();
     string value = "";
-    if (argument_ret.first == STATE_OK)
+    if (argument_ret.first == STATE_OK_WITH_VALUE)
     {
         value = argument_ret.second;
     }
@@ -472,6 +474,13 @@ type_of_return WAIT_processor()
         print_error("\"SLEEP\": Invalid argument, should be a number.");
         ret.first = STATE_ERROR;
     }
+    return ret;
+}
+
+type_of_return SEPARATOR_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    /* yep it does nothing. */
     return ret;
 }
 

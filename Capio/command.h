@@ -34,4 +34,6 @@ type_of_return SQRT_processor();
 type_of_return INT_processor();
 type_of_return WAIT_processor();
 
+type_of_return SEPARATOR_processor();
+
 #endif
