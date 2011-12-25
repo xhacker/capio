@@ -176,7 +176,7 @@ type_of_return get_value()
             {
                 if (list_item.second == "]") {
                     ret.second += " ]";
-                    ret.first = STATE_OK;
+                    ret.first = STATE_OK_WITH_VALUE;
                     break;
                 }
                 else
@@ -628,17 +628,57 @@ type_of_return WORDP_processor()
     return ret;
 }
 
-// TODO
 type_of_return LISTP_processor()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_value();
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        if (is_list(argument_ret.second))
+        {
+            ret.second = "TRUE";
+        }
+        else
+        {
+            ret.second = "FALSE";
+        }
+    }
+    else
+    {
+        print_error("\"LISTP\": Invalid argument, should be a value.");
+        ret.first = STATE_ERROR;
+    }
     return ret;
 }
 
-// TODO
 type_of_return EQUALP_processor()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    
+    type_of_return first_argument_ret = get_value();
+    if (first_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"EQUALP\": Invalid first argument, should be a value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    type_of_return second_argument_ret = get_value();
+    if (second_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"EQUALP\": Invalid second argument, should be a value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    if (first_argument_ret.second == second_argument_ret.second)
+    {
+        ret.second = "TRUE";
+    }
+    else
+    {
+        ret.second = "FALSE";
+    }
+    
     return ret;
 }
 
