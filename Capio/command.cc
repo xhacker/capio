@@ -409,10 +409,34 @@ type_of_return AND_processor()
     return ret;
 }
 
-// TODO
 type_of_return OR_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
+    
+    type_of_return first_argument_ret = get_bool();
+    if (first_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"OR\": Invalid argument, should be a bool value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    type_of_return second_argument_ret = get_bool();
+    if (second_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"OR\": Invalid argument, should be a bool value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    if (first_argument_ret.second == "TRUE" || second_argument_ret.second == "TRUE") {
+        ret.second = "TRUE";
+    }
+    else
+    {
+        ret.second = "FALSE";
+    }
+    
     return ret;
 }
 
