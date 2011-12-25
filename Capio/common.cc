@@ -36,6 +36,42 @@ bool is_number(string str)
     return ret;
 }
 
+bool is_word(string str)
+{
+    int point_count = 0;
+    bool all_number = true;
+    for (string::iterator iter = str.begin(); iter != str.end(); ++iter)
+    {
+        if (*iter == ' ')
+        {
+            return false;
+        }
+        else if (*iter == '.')
+        {
+            ++point_count;
+        }
+        else if (!isdigit(*iter))
+        {
+            all_number = false;
+        }
+        else
+        {
+            ;
+        }
+    }
+    
+    if (all_number && point_count <= 1)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+    
+    return false;
+}
+
 bool is_bool(string str)
 {
     if (str == "TRUE" || str == "FALSE")

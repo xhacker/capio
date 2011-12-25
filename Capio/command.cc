@@ -593,7 +593,6 @@ type_of_return INT_processor()
     return ret;
 }
 
-// TODO
 type_of_return NUMBERP_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
@@ -616,10 +615,25 @@ type_of_return NUMBERP_processor()
     return ret;
 }
 
-// TODO
 type_of_return WORDP_processor()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_value();
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        if (is_word(argument_ret.second))
+        {
+            ret.second = "TRUE";
+        }
+        else
+        {
+            ret.second = "FALSE";
+        }
+    }
+    else
+    {
+        print_error("\"WORDP\": Invalid argument, should be a value.");
+        ret.first = STATE_ERROR;
+    }
     return ret;
 }
 
