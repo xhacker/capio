@@ -160,8 +160,14 @@ type_of_return get_value()
     }
     else if (command[0] == '"')
     {
-        ret.first = STATE_OK_WITH_VALUE;
-        ret.second = command.substr(1);
+        if (command == "\"")
+        {
+            ret.second = "\"";
+        }
+        else
+        {
+            ret.second = command.substr(1);
+        }
     }
     else if (command == "[")
     {
@@ -325,6 +331,10 @@ type_of_return THING_processor()
     if (result_ret.first == STATE_OK_WITH_VALUE)
     {
         ret.second = result_ret.second;
+        if (ret.second == "\"")
+        {
+            ret.second = "";
+        }
     }
     else
     {
@@ -682,7 +692,6 @@ type_of_return EQUALP_processor()
     return ret;
 }
 
-// TODO
 type_of_return NAMEP_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");

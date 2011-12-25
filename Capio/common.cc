@@ -60,7 +60,7 @@ bool is_word(string str)
         }
     }
     
-    if (all_number && point_count <= 1)
+    if (str.size() > 0 && all_number && point_count <= 1)
     {
         return false;
     }
