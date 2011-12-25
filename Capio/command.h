@@ -35,7 +35,6 @@ type_of_return INT_processor();
 type_of_return NUMBERP_processor();
 type_of_return WORDP_processor();
 type_of_return LISTP_processor();
-type_of_return EMPTYP_processor();
 type_of_return EQUALP_processor();
 type_of_return NAMEP_processor();
 type_of_return WORD_processor();

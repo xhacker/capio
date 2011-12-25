@@ -41,6 +41,10 @@ MAKE "A 100 + 3
 PRINT NOT THING "A = 103 ;
 = FALSE
 
+# READLIST
+MAKE "A READLIST [ 1 2 3 "four ] PRINT :A ;
+= [ 1 2 3 four ]
+
 # IF
 IF 2 < 3 [ PRINT "Right. ] [ PRINT "Wrong. ] ;
 = Right.
@@ -62,7 +66,9 @@ PRINT WORDP "miao ;
 PRINT WORDP 333.33 ;
 = FALSE
 
-
+# WORD
+MAKE "A "miao MAKE "B "mew PRINT WORD :A :B ;
+= miaomew
 
 
 

@@ -29,7 +29,6 @@ void init_command()
     map_of_builtin_command.insert(type_of_command("NUMBERP", NUMBERP_processor));
     map_of_builtin_command.insert(type_of_command("WORDP", WORDP_processor));
     map_of_builtin_command.insert(type_of_command("LISTP", LISTP_processor));
-    map_of_builtin_command.insert(type_of_command("EMPTYP", EMPTYP_processor));
     map_of_builtin_command.insert(type_of_command("EQUALP", EQUALP_processor));
     map_of_builtin_command.insert(type_of_command("NAMEP", NAMEP_processor));
     map_of_builtin_command.insert(type_of_command("WORD", WORD_processor));
@@ -66,21 +65,14 @@ type_of_command_function find_command(string command)
 
 type_of_return get_word()
 {
-    string command = get_input();
-    type_of_return ret(STATE_OK, "");
-
-    if (command == "")
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    ret = get_value();
+    if (ret.first == STATE_OK_WITH_VALUE)
     {
-        ret.first = STATE_EOF;
-    }
-    else if (command[0] != '"')
-    {
-        ret.first = STATE_ERROR;
-    }
-    else
-    {
-        ret.first = STATE_OK;
-        ret.second = command.substr(1);
+        if (!is_word(ret.second))
+        {
+            ret.first = STATE_ERROR;
+        }
     }
     return ret;
 }
@@ -107,7 +99,7 @@ type_of_return get_list()
             {
                 if (list_item.second == "]") {
                     ret.second += " ]";
-                    ret.first = STATE_OK;
+                    ret.first = STATE_OK_WITH_VALUE;
                     break;
                 }
                 else
@@ -255,7 +247,7 @@ type_of_return MAKE_processor()
     type_of_return ret(STATE_OK, "");
 
     type_of_return first_argument_ret = get_word();
-    if (first_argument_ret.first == STATE_OK)
+    if (first_argument_ret.first == STATE_OK_WITH_VALUE)
     {
         name = first_argument_ret.second;
     }
@@ -513,7 +505,6 @@ type_of_return IF_processor()
     return ret;
 }
 
-// TODO
 type_of_return REPEAT_processor()
 {
     type_of_return ret(STATE_OK, "");
@@ -645,13 +636,6 @@ type_of_return LISTP_processor()
 }
 
 // TODO
-type_of_return EMPTYP_processor()
-{
-    type_of_return ret(STATE_OK, "");
-    return ret;
-}
-
-// TODO
 type_of_return EQUALP_processor()
 {
     type_of_return ret(STATE_OK, "");
@@ -668,7 +652,26 @@ type_of_return NAMEP_processor()
 // TODO
 type_of_return WORD_processor()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    
+    type_of_return first_argument_ret = get_word();
+    if (first_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"WORD\": Invalid first argument, should be a word.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    type_of_return second_argument_ret = get_word();
+    if (second_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"WORD\": Invalid second argument, should be a word.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    ret.second = first_argument_ret.second + second_argument_ret.second;
+    
     return ret;
 }
 
