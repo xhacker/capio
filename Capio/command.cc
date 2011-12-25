@@ -214,21 +214,14 @@ void main_processor()
     {
         string command = get_input();
         
-        if (command == stop_flag)
-        {
-            break;
-        }
-        
-        // TODO: use find_command istead
-        type_of_command_map::iterator it;
-        it = map_of_builtin_command.find(command);
-        if (it == map_of_builtin_command.end())
+        type_of_command_function command_processor = find_command(command);
+        if (command_processor == NULL)
         {
             print_error("\"" + command + "\" is not a valid command.");
         }
         else
         {
-            (*(it->second))();
+            command_processor();
         }
     }
 }

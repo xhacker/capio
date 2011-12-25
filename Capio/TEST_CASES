@@ -10,8 +10,8 @@ PRINT 3 + 5 * 2 - 4 / 3 + 3 > 300 ;
 ## With Variable
 MAKE "A 200
 MAKE "B 100
-MAKE "B THING "B + 50.5 * 2
-PRINT THING "A + 50 / 50 = THING "B ;
+MAKE "B :B + 50.5 * 2
+PRINT THING "A + 50 / 50 = :B ;
 = TRUE
 
 ## With Parentheses
@@ -23,8 +23,8 @@ PRINT ( 2 + 3 ) * ( ( 4 + 5 ) - 8 ) ;
 # Variable
 
 MAKE "A 100 ;
-MAKE "B THING "A + 100 ;
-PRINT THING "B ;
+MAKE "B :A + 100 ;
+PRINT :B ;
 = 200
 MAKE "C "miao
 PRINT THING "C ;

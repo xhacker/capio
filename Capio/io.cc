@@ -13,8 +13,18 @@ string get_input()
     {
         string command = "";
         cin >> command;
-        input_buf.push_back(command);
-        ret = command;
+        
+        if (command[0] == ':')
+        {
+            input_buf.push_back("THING");
+            input_buf.push_back('"' + command.substr(1));
+            ret = "THING";
+        }
+        else
+        {
+            input_buf.push_back(command);
+            ret = command;
+        }
     }
     else
     {
