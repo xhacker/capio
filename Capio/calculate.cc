@@ -240,20 +240,20 @@ string do_operate(type_of_return a, string op, type_of_return b)
 
 int find_parenthesis_r(vector<string> list, int left)
 {
-    int parenthesis_l = 1;
+    int parentheses_l = 1;
     int i, r;
     for (i = left + 1; ; ++i)
     {
         int parenthesis_test = is_parenthesis(list[i]);
         if (parenthesis_test == PARENTHESIS_L)
         {
-            ++parenthesis_l;
+            ++parentheses_l;
         }
         else if (parenthesis_test == PARENTHESIS_R)
         {
-            --parenthesis_l;
+            --parentheses_l;
         }
-        if (parenthesis_l == 0)
+        if (parentheses_l == 0)
         {
             r = i;
             break;

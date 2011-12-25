@@ -44,6 +44,31 @@ void rollback_input()
     }
 }
 
+type_of_state skip_list()
+{
+    string parenthesis_first = get_input();
+    if (parenthesis_first != "[")
+    {
+        return STATE_ERROR;
+    }
+    
+    int parentheses_l = 1;
+    while (parentheses_l)
+    {
+        string str = get_input();
+        if (str == "[")
+        {
+            ++parentheses_l;
+        }
+        else if (str == "]")
+        {
+            --parentheses_l;
+        }
+    }
+    
+    return STATE_OK;
+}
+
 void print_error(string message)
 {
     cout << "[ERROR] " << message << endl;

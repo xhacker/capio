@@ -214,6 +214,11 @@ void main_processor()
     {
         string command = get_input();
         
+        if (command == stop_flag)
+        {
+            return;
+        }
+        
         type_of_command_function command_processor = find_command(command);
         if (command_processor == NULL)
         {
@@ -463,6 +468,32 @@ type_of_return NOT_processor()
 type_of_return IF_processor()
 {
     type_of_return ret(STATE_OK, "");
+    
+    type_of_return argument_ret = get_bool();
+    if (argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"IF\": Invalid first argument, should be a bool value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    if (argument_ret.second == "TRUE")
+    {
+        main_processor();
+        if (skip_list() == STATE_ERROR)
+        {
+            print_error("\"IF\": Invalid third argument, should be a list.");
+        }
+    }
+    else
+    {
+        if (skip_list() == STATE_ERROR)
+        {
+            print_error("\"IF\": Invalid second argument, should be a list.");
+        }
+        main_processor();
+    }
+    
     return ret;
 }
 

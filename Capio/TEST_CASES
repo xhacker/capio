@@ -41,3 +41,13 @@ PRINT OR 100 < 99.5 3 = 2 + 2 / 2 ;
 MAKE "A 100 + 3
 PRINT NOT THING "A = 103 ;
 = FALSE
+
+# If
+
+IF 2 < 3 [ PRINT "Right. ] [ PRINT "Wrong. ] ;
+= Right.
+IF 4 * 4 < 3 * 3 [ MAKE "ret "Wrong. ] [ MAKE "ret "Right. ] PRINT :ret ;
+= Right.
+
+
+
