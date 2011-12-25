@@ -132,8 +132,9 @@ type_of_return calc()
         }
     }
     
-    if (parenthesis_l)
+    if (parenthesis_l || elem_list.size() == 0)
     {
+        print_error("Invalid expression.");
         ret.first = STATE_ERROR;
         return ret;
     }

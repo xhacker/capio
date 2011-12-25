@@ -385,7 +385,7 @@ type_of_return AND_processor()
     type_of_return first_argument_ret = get_bool();
     if (first_argument_ret.first != STATE_OK_WITH_VALUE)
     {
-        print_error("\"AND\": Invalid argument, should be a bool value.");
+        print_error("\"AND\": Invalid first argument, should be a bool value.");
         ret.first = STATE_ERROR;
         return ret;
     }
@@ -393,12 +393,13 @@ type_of_return AND_processor()
     type_of_return second_argument_ret = get_bool();
     if (second_argument_ret.first != STATE_OK_WITH_VALUE)
     {
-        print_error("\"AND\": Invalid argument, should be a bool value.");
+        print_error("\"AND\": Invalid second argument, should be a bool value.");
         ret.first = STATE_ERROR;
         return ret;
     }
     
-    if (first_argument_ret.second == "TRUE" && second_argument_ret.second == "TRUE") {
+    if (first_argument_ret.second == "TRUE" && second_argument_ret.second == "TRUE")
+    {
         ret.second = "TRUE";
     }
     else
@@ -416,7 +417,7 @@ type_of_return OR_processor()
     type_of_return first_argument_ret = get_bool();
     if (first_argument_ret.first != STATE_OK_WITH_VALUE)
     {
-        print_error("\"OR\": Invalid argument, should be a bool value.");
+        print_error("\"OR\": Invalid first argument, should be a bool value.");
         ret.first = STATE_ERROR;
         return ret;
     }
@@ -424,12 +425,13 @@ type_of_return OR_processor()
     type_of_return second_argument_ret = get_bool();
     if (second_argument_ret.first != STATE_OK_WITH_VALUE)
     {
-        print_error("\"OR\": Invalid argument, should be a bool value.");
+        print_error("\"OR\": Invalid second argument, should be a bool value.");
         ret.first = STATE_ERROR;
         return ret;
     }
     
-    if (first_argument_ret.second == "TRUE" || second_argument_ret.second == "TRUE") {
+    if (first_argument_ret.second == "TRUE" || second_argument_ret.second == "TRUE")
+    {
         ret.second = "TRUE";
     }
     else
@@ -440,10 +442,27 @@ type_of_return OR_processor()
     return ret;
 }
 
-// TODO
 type_of_return NOT_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
+    
+    type_of_return argument_ret = get_bool();
+    if (argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"NOT\": Invalid argument, should be a bool value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    if (argument_ret.second == "TRUE")
+    {
+        ret.second = "FALSE";
+    }
+    else
+    {
+        ret.second = "TRUE";
+    }
+    
     return ret;
 }
 
