@@ -36,6 +36,16 @@ bool is_number(string str)
     return ret;
 }
 
+bool is_bool(string str)
+{
+    if (str == "TRUE" || str == "FALSE")
+    {
+        return true;
+    }
+    
+    return false;
+}
+
 string num_to_string(int number)
 {
     stringstream ss;

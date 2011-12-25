@@ -71,7 +71,7 @@ type_of_return get_word()
 type_of_return get_list()
 {
     string command = get_input();
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
     
     if (command == "")
     {
@@ -80,10 +80,10 @@ type_of_return get_list()
     else if (command == "[")
     {
         ret.second = "[";
-        type_of_return list_item(STATE_OK, "");
+        type_of_return list_item(STATE_OK_WITH_VALUE, "");
         while (true) {
             list_item = get_value();
-            if (list_item.first == STATE_OK) {
+            if (list_item.first == STATE_OK_WITH_VALUE) {
                 ret.second += (" " + list_item.second);
             }
             else if (list_item.first == STATE_ERROR)
@@ -116,7 +116,7 @@ type_of_return get_number()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     ret = get_value();
-    if (ret.first == STATE_OK)
+    if (ret.first == STATE_OK_WITH_VALUE)
     {
         if (!is_number(ret.second))
         {
@@ -126,10 +126,17 @@ type_of_return get_number()
     return ret;
 }
 
-// TODO
 type_of_return get_bool()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    ret = get_value();
+    if (ret.first == STATE_OK_WITH_VALUE)
+    {
+        if (!is_bool(ret.second))
+        {
+            ret.first = STATE_ERROR;
+        }
+    }
     return ret;
 }
 
@@ -359,7 +366,7 @@ type_of_return READLIST_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     type_of_return list_ret = get_list();
-    if (list_ret.first == STATE_OK) {
+    if (list_ret.first == STATE_OK_WITH_VALUE) {
         ret.first = STATE_OK_WITH_VALUE;
         ret.second = list_ret.second;
     }
@@ -371,10 +378,34 @@ type_of_return READLIST_processor()
     return ret;
 }
 
-// TODO
 type_of_return AND_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
+    
+    type_of_return first_argument_ret = get_bool();
+    if (first_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"AND\": Invalid argument, should be a bool value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+
+    type_of_return second_argument_ret = get_bool();
+    if (second_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"AND\": Invalid argument, should be a bool value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    if (first_argument_ret.second == "TRUE" && second_argument_ret.second == "TRUE") {
+        ret.second = "TRUE";
+    }
+    else
+    {
+        ret.second = "FALSE";
+    }
+    
     return ret;
 }
 
