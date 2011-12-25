@@ -545,7 +545,7 @@ type_of_return SQRT_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     type_of_return argument_ret = get_number();
-    if (argument_ret.first == STATE_OK) {
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
         ret.first = STATE_OK_WITH_VALUE;
         double number = atof(argument_ret.second.c_str());
         double sqrted = sqrt(number);
@@ -563,7 +563,7 @@ type_of_return INT_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     type_of_return argument_ret = get_number();
-    if (argument_ret.first == STATE_OK) {
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
         ret.first = STATE_OK_WITH_VALUE;
         int number = (int)atof(argument_ret.second.c_str());
         ret.second = num_to_string(number);
@@ -584,7 +584,7 @@ type_of_return WAIT_processor()
         ret.first = STATE_OK;
         /* 1 microsecond equals to 1x10E-6 second. */
         int ms = (int)atof(argument_ret.second.c_str());
-        print_log("SLEEP: " + num_to_string(ms) + " ms.");
+        print_log("WAIT: " + num_to_string(ms) + " ms.");
         usleep(ms);
     }
     else
