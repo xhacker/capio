@@ -464,7 +464,6 @@ type_of_return NOT_processor()
     return ret;
 }
 
-// TODO
 type_of_return IF_processor()
 {
     type_of_return ret(STATE_OK, "");
@@ -501,15 +500,34 @@ type_of_return IF_processor()
 type_of_return REPEAT_processor()
 {
     type_of_return ret(STATE_OK, "");
+    
+    type_of_return argument_ret = get_number();
+    if (argument_ret.first == STATE_OK_WITH_VALUE)
+    {
+        int repeat = (int)atof(argument_ret.second.c_str());
+        int ri = 0;
+        int input_position = get_input_position();
+        for (ri = 1; ri <= repeat; ++ri)
+        {
+            rollback_input_to_position(input_position);
+            main_processor();
+        }
+    }
+    else
+    {
+        print_error("\"REPEAT\": Invalid first argument, should be a number.");
+        ret.first = STATE_ERROR;
+    }
+    
     return ret;
 }
 
 type_of_return RANDOM_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
+    
     type_of_return argument_ret = get_number();
-    if (argument_ret.first == STATE_OK) {
-        ret.first = STATE_OK_WITH_VALUE;
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
         int rand_max = (int)atof(argument_ret.second.c_str());
         int rand_num = rand() % rand_max;
         ret.second = num_to_string(rand_num);
@@ -519,6 +537,7 @@ type_of_return RANDOM_processor()
         print_error("\"RAMDOM\": Invalid argument, should be a number.");
         ret.first = STATE_ERROR;
     }
+    
     return ret;
 }
 

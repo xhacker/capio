@@ -7,6 +7,8 @@ using namespace std;
 
 string get_input();
 void rollback_input();
+int get_input_position();
+void rollback_input_to_position(int);
 type_of_state skip_list();
 
 void print_log(string);

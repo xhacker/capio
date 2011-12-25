@@ -44,6 +44,16 @@ void rollback_input()
     }
 }
 
+int get_input_position()
+{
+    return input_buf_pos;
+}
+
+void rollback_input_to_position(int position)
+{
+    input_buf_pos = position;
+}
+
 type_of_state skip_list()
 {
     string parenthesis_first = get_input();

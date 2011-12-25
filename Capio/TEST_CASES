@@ -49,5 +49,6 @@ IF 2 < 3 [ PRINT "Right. ] [ PRINT "Wrong. ] ;
 IF 4 * 4 < 3 * 3 [ MAKE "ret "Wrong. ] [ MAKE "ret "Right. ] PRINT :ret ;
 = Right.
 
-
+# Repeat
+PRINT "Before REPEAT 3 [ PRINT "Repeating(3)... ] PRINT "After ;
 
