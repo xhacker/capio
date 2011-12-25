@@ -82,6 +82,17 @@ bool is_bool(string str)
     return false;
 }
 
+bool is_list(string str)
+{
+    if (str[0] == '[')
+    {
+        /* a variable must be a valid variable. */
+        return true;
+    }
+    
+    return false;
+}
+
 string num_to_string(int number)
 {
     stringstream ss;

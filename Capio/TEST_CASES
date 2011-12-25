@@ -66,6 +66,9 @@ PRINT WORDP "miao ;
 PRINT WORDP 333.33 ;
 = FALSE
 
+# LISTP
+PRINT 
+
 # WORD
 MAKE "A "miao MAKE "B "mew PRINT WORD :A :B ;
 = miaomew
