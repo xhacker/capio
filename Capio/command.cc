@@ -322,7 +322,7 @@ type_of_return THING_processor()
     }
     
     type_of_return result_ret = get_variable(value);
-    if (result_ret.first == STATE_OK)
+    if (result_ret.first == STATE_OK_WITH_VALUE)
     {
         ret.second = result_ret.second;
     }
@@ -685,11 +685,27 @@ type_of_return EQUALP_processor()
 // TODO
 type_of_return NAMEP_processor()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_word();
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        type_of_return variable_ret = get_variable(argument_ret.second);
+        if (variable_ret.first == STATE_OK_WITH_VALUE)
+        {
+            ret.second = "TRUE";
+        }
+        else
+        {
+            ret.second = "FALSE";
+        }
+    }
+    else
+    {
+        print_error("\"NAMEP\": Invalid argument, should be a word.");
+        ret.first = STATE_ERROR;
+    }
     return ret;
 }
 
-// TODO
 type_of_return WORD_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");

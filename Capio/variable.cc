@@ -27,7 +27,7 @@ void set_variable(string name, string value)
 
 type_of_return get_variable(string name)
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
     
     type_of_variable_map::iterator it;
     it = map_of_variable.find(name);
@@ -37,7 +37,6 @@ type_of_return get_variable(string name)
     }
     else
     {
-        ret.first = STATE_OK;
         ret.second = it->second;
     }
     

@@ -76,6 +76,11 @@ MAKE "A 100 PRINT EQUALP :A 100 ;
 PRINT EQUALP "miao "mew ;
 = FALSE
 
+# NAMEP
+MAKE "A 100 PRINT NAMEP "A PRINT NAMEP "B ;
+= TRUE
+= FALSE
+
 # WORD
 MAKE "A "miao MAKE "B "mew PRINT WORD :A :B ;
 = miaomew
