@@ -31,7 +31,6 @@ PRINT THING "C ;
 = miao
 
 # Bool
-
 PRINT AND 100 > 99 70 + 30 = 100 ;
 = TRUE
 PRINT AND 100 > 99 70 + 30 < 100 ;
@@ -42,13 +41,27 @@ MAKE "A 100 + 3
 PRINT NOT THING "A = 103 ;
 = FALSE
 
-# If
-
+# IF
 IF 2 < 3 [ PRINT "Right. ] [ PRINT "Wrong. ] ;
 = Right.
 IF 4 * 4 < 3 * 3 [ MAKE "ret "Wrong. ] [ MAKE "ret "Right. ] PRINT :ret ;
 = Right.
 
-# Repeat
+# REPEAT
 PRINT "Before REPEAT 3 [ PRINT "Repeating(3)... WAIT 1000000 ] PRINT "After ;
+
+# NUMBERP
+MAKE "A 100.1 PRINT NUMBERP :A ;
+= TRUE
+PRINT NUMBERP "hello ;
+= FALSE
+
+
+
+
+
+
+
+
+
 

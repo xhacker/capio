@@ -32,7 +32,24 @@ type_of_return REPEAT_processor();
 type_of_return RANDOM_processor();
 type_of_return SQRT_processor();
 type_of_return INT_processor();
+type_of_return NUMBERP_processor();
+type_of_return WORDP_processor();
+type_of_return LISTP_processor();
+type_of_return EMPTYP_processor();
+type_of_return EQUALP_processor();
+type_of_return NAMEP_processor();
+type_of_return WORD_processor();
+type_of_return SENTENCE_processor();
+type_of_return FIRST_processor();
+type_of_return BUTFIRST_processor();
+type_of_return TO_processor();
+type_of_return OUTPUT_processor();
+type_of_return STOP_processor();
+type_of_return ERASE_processor();
+type_of_return ERASEALL_processor();
 type_of_return WAIT_processor();
+type_of_return LOAD_processor();
+type_of_return SAVE_processor();
 
 type_of_return SEPARATOR_processor();
 

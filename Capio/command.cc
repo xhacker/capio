@@ -26,7 +26,24 @@ void init_command()
     map_of_builtin_command.insert(type_of_command("RANDOM", RANDOM_processor));
     map_of_builtin_command.insert(type_of_command("SQRT", SQRT_processor));
     map_of_builtin_command.insert(type_of_command("INT", INT_processor));
+    map_of_builtin_command.insert(type_of_command("NUMBERP", NUMBERP_processor));
+    map_of_builtin_command.insert(type_of_command("WORDP", WORDP_processor));
+    map_of_builtin_command.insert(type_of_command("LISTP", LISTP_processor));
+    map_of_builtin_command.insert(type_of_command("EMPTYP", EMPTYP_processor));
+    map_of_builtin_command.insert(type_of_command("EQUALP", EQUALP_processor));
+    map_of_builtin_command.insert(type_of_command("NAMEP", NAMEP_processor));
+    map_of_builtin_command.insert(type_of_command("WORD", WORD_processor));
+    map_of_builtin_command.insert(type_of_command("SENTENCE", SENTENCE_processor));
+    map_of_builtin_command.insert(type_of_command("FIRST", FIRST_processor));
+    map_of_builtin_command.insert(type_of_command("BUTFIRST", BUTFIRST_processor));
+    map_of_builtin_command.insert(type_of_command("TO", TO_processor));
+    map_of_builtin_command.insert(type_of_command("OUTPUT", OUTPUT_processor));
+    map_of_builtin_command.insert(type_of_command("STOP", STOP_processor));
+    map_of_builtin_command.insert(type_of_command("ERASE", ERASE_processor));
+    map_of_builtin_command.insert(type_of_command("ERASEALL", ERASEALL_processor));
     map_of_builtin_command.insert(type_of_command("WAIT", WAIT_processor));
+    map_of_builtin_command.insert(type_of_command("LOAD", LOAD_processor));
+    map_of_builtin_command.insert(type_of_command("SAVE", SAVE_processor));
     
     /* aliases */
     map_of_builtin_command.insert(type_of_command("RAND", RANDOM_processor));
@@ -576,6 +593,127 @@ type_of_return INT_processor()
     return ret;
 }
 
+// TODO
+type_of_return NUMBERP_processor()
+{
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_value();
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        if (is_number(argument_ret.second))
+        {
+            ret.second = "TRUE";
+        }
+        else
+        {
+            ret.second = "FALSE";
+        }
+    }
+    else
+    {
+        print_error("\"NUMBERP\": Invalid argument, should be a value.");
+        ret.first = STATE_ERROR;
+    }
+    return ret;
+}
+
+// TODO
+type_of_return WORDP_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return LISTP_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return EMPTYP_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return EQUALP_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return NAMEP_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return WORD_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return SENTENCE_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return FIRST_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return BUTFIRST_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return TO_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return OUTPUT_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return STOP_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return ERASE_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return ERASEALL_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
 type_of_return WAIT_processor()
 {
     type_of_return ret(STATE_OK, "");
@@ -592,6 +730,20 @@ type_of_return WAIT_processor()
         print_error("\"WAIT\": Invalid argument, should be a number.");
         ret.first = STATE_ERROR;
     }
+    return ret;
+}
+
+// TODO
+type_of_return LOAD_processor()
+{
+    type_of_return ret(STATE_OK, "");
+    return ret;
+}
+
+// TODO
+type_of_return SAVE_processor()
+{
+    type_of_return ret(STATE_OK, "");
     return ret;
 }
 
