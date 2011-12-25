@@ -580,7 +580,7 @@ type_of_return WAIT_processor()
 {
     type_of_return ret(STATE_OK, "");
     type_of_return argument_ret = get_number();
-    if (argument_ret.first == STATE_OK) {
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
         ret.first = STATE_OK;
         /* 1 microsecond equals to 1x10E-6 second. */
         int ms = (int)atof(argument_ret.second.c_str());
@@ -589,7 +589,7 @@ type_of_return WAIT_processor()
     }
     else
     {
-        print_error("\"SLEEP\": Invalid argument, should be a number.");
+        print_error("\"WAIT\": Invalid argument, should be a number.");
         ret.first = STATE_ERROR;
     }
     return ret;
