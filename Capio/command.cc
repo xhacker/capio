@@ -800,7 +800,39 @@ type_of_return FIRST_processor()
 // TODO
 type_of_return BUTFIRST_processor()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_value();
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        if (is_list(argument_ret.second))
+        {
+            if (is_empty(argument_ret.second))
+            {
+                ret.second = "[ ]";
+            }
+            else
+            {
+                /* 0 should be '[', 1 should be ' '. */
+                int i = 0;
+                for (i = 2; i != argument_ret.second.size(); ++i)
+                {
+                    if (argument_ret.second[i] == ' ')
+                    {
+                        break;
+                    }
+                }
+                ret.second = "[" + argument_ret.second.substr(i);
+            }
+        }
+        else
+        {
+            ret.second = argument_ret.second.substr(1);
+        }
+    }
+    else
+    {
+        print_error("\"BUTFIRST\": Invalid argument, should be a value.");
+        ret.first = STATE_ERROR;
+    }
     return ret;
 }
 
