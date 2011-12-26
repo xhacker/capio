@@ -9,6 +9,7 @@ bool is_number(string);
 bool is_word(string);
 bool is_bool(string);
 bool is_list(string);
+bool is_empty(string);
 string num_to_string(int);
 string num_to_string(double);
 

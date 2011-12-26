@@ -93,6 +93,16 @@ bool is_list(string str)
     return false;
 }
 
+bool is_empty(string str)
+{
+    if (str == "[ ]" || str == "\"")
+    {
+        return true;
+    }
+    
+    return false;
+}
+
 string num_to_string(int number)
 {
     stringstream ss;

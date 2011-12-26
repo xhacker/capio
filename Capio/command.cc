@@ -2,6 +2,7 @@
 #include <map>
 #include <cmath>
 #include <cstdlib>
+#include <sstream>
 #include "command.h"
 #include "io.h"
 #include "common.h"
@@ -750,7 +751,32 @@ type_of_return SENTENCE_processor()
 // TODO
 type_of_return FIRST_processor()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_value();
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        if (is_list(argument_ret.second))
+        {
+            if (is_empty(argument_ret.second))
+            {
+                ret.second = "\"";
+            }
+            else
+            {
+                stringstream ss;
+                ss << argument_ret.second.substr(2);
+                ss >> ret.second;
+            }
+        }
+        else
+        {
+            ret.second = argument_ret.second[0];
+        }
+    }
+    else
+    {
+        print_error("\"FIRST\": Invalid argument, should be a value.");
+        ret.first = STATE_ERROR;
+    }
     return ret;
 }
 

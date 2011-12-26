@@ -85,7 +85,9 @@ MAKE "A 100 PRINT NAMEP "A PRINT NAMEP "B ;
 MAKE "A "miao MAKE "B "mew PRINT WORD :A :B ;
 = miaomew
 
-
+# FIRST
+MAKE "A [ "mew "miao 123 ] PRINT FIRST :A ;
+= mew
 
 
 
