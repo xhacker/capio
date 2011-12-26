@@ -85,6 +85,12 @@ MAKE "A 100 PRINT NAMEP "A PRINT NAMEP "B ;
 MAKE "A "miao MAKE "B "mew PRINT WORD :A :B ;
 = miaomew
 
+# SENTENCE
+MAKE "A "hello PRINT SENTENCE :A "world ;
+= [ hello world ]
+MAKE "A "hello MAKE "B [ "i "am "an "array ] PRINT SENTENCE :A :B ;
+= [ hello [ i am an array ] ]
+
 # FIRST
 MAKE "A [ "mew "miao 123 ] PRINT FIRST :A ;
 = mew

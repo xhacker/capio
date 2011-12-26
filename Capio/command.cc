@@ -741,14 +741,31 @@ type_of_return WORD_processor()
     return ret;
 }
 
-// TODO
 type_of_return SENTENCE_processor()
 {
-    type_of_return ret(STATE_OK, "");
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    
+    type_of_return first_argument_ret = get_value();
+    if (first_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"SENTENCE\": Invalid first argument, should be a value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    type_of_return second_argument_ret = get_value();
+    if (second_argument_ret.first != STATE_OK_WITH_VALUE)
+    {
+        print_error("\"SENTENCE\": Invalid second argument, should be a value.");
+        ret.first = STATE_ERROR;
+        return ret;
+    }
+    
+    ret.second = "[ " + first_argument_ret.second + " " + second_argument_ret.second + " ]";
+    
     return ret;
 }
 
-// TODO
 type_of_return FIRST_processor()
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
