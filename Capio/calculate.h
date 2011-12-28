@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "common.h"
+#include "variable.h"
 
 #define NOT_OP      0
 #define OP_EQUAL    11
@@ -20,7 +21,7 @@
 
 int is_operator(string);
 int is_parenthesis(string);
-type_of_return calc();
+type_of_return calc(type_of_variable_map &);
 type_of_return calc_list(vector<string>);
 type_of_return calc_list(vector<string>, int, int);
 string do_operate(type_of_return, string, type_of_return);

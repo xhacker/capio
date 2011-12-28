@@ -3,6 +3,7 @@
 #include "calculate.h"
 #include "common.h"
 #include "command.h"
+#include "variable.h"
 #include "io.h"
 
 int is_operator(string op)
@@ -59,7 +60,7 @@ int is_parenthesis(string op)
     return NOT_PARENTHESIS;
 }
 
-type_of_return calc()
+type_of_return calc(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     
@@ -104,7 +105,7 @@ type_of_return calc()
             }
             else
             {
-                type_of_return command_ret = command_processor();
+                type_of_return command_ret = command_processor(map_of_local_variable);
                 if (command_ret.first == STATE_OK_WITH_VALUE)
                 {
                     elem_list.push_back(command_ret.second);

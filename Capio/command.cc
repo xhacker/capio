@@ -12,6 +12,7 @@
 using namespace std;
 
 type_of_command_map map_of_builtin_command;
+extern type_of_variable_map map_of_variable;
 
 void init_command()
 {
@@ -64,10 +65,10 @@ type_of_command_function find_command(string command)
     return it->second;
 }
 
-type_of_return get_word()
+type_of_return get_word(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    ret = get_value();
+    ret = get_value(map_of_local_variable);
     if (ret.first == STATE_OK_WITH_VALUE)
     {
         if (!is_word(ret.second))
@@ -78,7 +79,7 @@ type_of_return get_word()
     return ret;
 }
 
-type_of_return get_list()
+type_of_return get_list(type_of_variable_map &map_of_local_variable)
 {
     string command = get_input();
     type_of_return ret(STATE_OK_WITH_VALUE, "");
@@ -92,7 +93,7 @@ type_of_return get_list()
         ret.second = "[";
         type_of_return list_item(STATE_OK_WITH_VALUE, "");
         while (true) {
-            list_item = get_value();
+            list_item = get_value(map_of_local_variable);
             if (list_item.first == STATE_OK_WITH_VALUE) {
                 ret.second += (" " + list_item.second);
             }
@@ -122,10 +123,10 @@ type_of_return get_list()
     return ret;
 }
 
-type_of_return get_number()
+type_of_return get_number(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    ret = get_value();
+    ret = get_value(map_of_local_variable);
     if (ret.first == STATE_OK_WITH_VALUE)
     {
         if (!is_number(ret.second))
@@ -136,10 +137,10 @@ type_of_return get_number()
     return ret;
 }
 
-type_of_return get_bool()
+type_of_return get_bool(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    ret = get_value();
+    ret = get_value(map_of_local_variable);
     if (ret.first == STATE_OK_WITH_VALUE)
     {
         if (!is_bool(ret.second))
@@ -150,7 +151,7 @@ type_of_return get_bool()
     return ret;
 }
 
-type_of_return get_value()
+type_of_return get_value(type_of_variable_map &map_of_local_variable)
 {
     string command = get_input();
     type_of_return ret(STATE_OK_WITH_VALUE, "");
@@ -175,7 +176,7 @@ type_of_return get_value()
         ret.second = "[";
         type_of_return list_item(STATE_OK_WITH_VALUE, "");
         while (true) {
-            list_item = get_value();
+            list_item = get_value(map_of_local_variable);
             if (list_item.first == STATE_OK_WITH_VALUE) {
                 ret.second += (" " + list_item.second);
             }
@@ -206,13 +207,13 @@ type_of_return get_value()
     else
     {
         rollback_input();
-        ret = calc();
+        ret = calc(map_of_local_variable);
     }
 
     return ret;
 }
 
-void main_processor()
+void main_processor(type_of_variable_map &map_of_local_variable)
 {
     string stop_flag = "";
     string start_flag = "";
@@ -230,30 +231,65 @@ void main_processor()
     {
         string command = get_input();
         
-        if (command == stop_flag)
+        if (command == stop_flag || command == "END")
         {
             return;
         }
         
         type_of_command_function command_processor = find_command(command);
-        if (command_processor == NULL)
+        type_of_function_return func_ret = get_function(command);
+        if (command_processor)
         {
-            print_error("\"" + command + "\" is not a valid command.");
+            command_processor(map_of_local_variable);
+        }
+        else if (func_ret.first == STATE_OK_WITH_VALUE)
+        {
+            type_of_variable_map new_map_of_local_variable;
+            int argi;
+            bool arg_valid = true;
+            for (argi = 0; argi != func_ret.second.parameters.size(); ++argi)
+            {
+                type_of_return parameter = get_value(map_of_local_variable);
+                if (parameter.first == STATE_OK_WITH_VALUE)
+                {
+                    new_map_of_local_variable.insert(type_of_variable(
+                        func_ret.second.parameters[argi],
+                        parameter.second));
+                }
+                else
+                {
+                    print_error("\"" + command + "\": Invalid argument.");
+                    arg_valid = false;
+                    break;
+                }
+            }
+            
+            if (arg_valid)
+            {
+                print_log("Entering function...");
+                
+                int current_position = get_input_position();
+                rollback_input_to_position(func_ret.second.start_position);
+                main_processor(new_map_of_local_variable);
+                rollback_input_to_position(current_position);
+                
+                print_log("Exiting function...");
+            }
         }
         else
         {
-            command_processor();
+            print_error("\"" + command + "\" is not a valid command.");
         }
     }
 }
 
-type_of_return MAKE_processor()
+type_of_return MAKE_processor(type_of_variable_map &map_of_local_variable)
 {
     string name = "";
     string value = "";
     type_of_return ret(STATE_OK, "");
 
-    type_of_return first_argument_ret = get_word();
+    type_of_return first_argument_ret = get_word(map_of_local_variable);
     if (first_argument_ret.first == STATE_OK_WITH_VALUE)
     {
         name = first_argument_ret.second;
@@ -274,7 +310,7 @@ type_of_return MAKE_processor()
         ;
     }
 
-    type_of_return second_argument_ret = get_value();
+    type_of_return second_argument_ret = get_value(map_of_local_variable);
     if (second_argument_ret.first == STATE_OK_WITH_VALUE)
     {
         value = second_argument_ret.second;
@@ -295,18 +331,29 @@ type_of_return MAKE_processor()
         ;
     }
 
-    set_variable(name, value);
+    if (&map_of_local_variable == &map_of_variable ||
+        get_variable(map_of_local_variable, name).first == STATE_OK_WITH_VALUE)
+    {
+        /* if scope is global, use global */
+        /* if scope is local and local has this variable, use local */
+        set_variable(map_of_local_variable, name, value);
+    }
+    else
+    {
+        /* if scope is local but local does not have this variable, use global */
+        set_variable(map_of_variable, name, value);
+    }
     print_log("MAKE: " + name + " = " + value);
 
     ret.first = STATE_OK;
     return ret;
 }
 
-type_of_return THING_processor()
+type_of_return THING_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
 
-    type_of_return argument_ret = get_value();
+    type_of_return argument_ret = get_value(map_of_local_variable);
     string value = "";
     if (argument_ret.first == STATE_OK_WITH_VALUE)
     {
@@ -328,31 +375,47 @@ type_of_return THING_processor()
         ;
     }
     
-    type_of_return result_ret = get_variable(value);
-    if (result_ret.first == STATE_OK_WITH_VALUE)
+    type_of_return global_ret = get_variable(map_of_variable, value);
+    
+    if (&map_of_local_variable != &map_of_variable) 
     {
-        ret.second = result_ret.second;
-        if (ret.second == "\"")
+        /* if scope is local, try to get variable from local */
+        type_of_return local_ret = get_variable(map_of_local_variable, value);
+        if (local_ret.first == STATE_OK_WITH_VALUE)
         {
-            ret.second = "";
+            ret.second = local_ret.second;
+            goto THING_RETURN;
         }
+    }
+    
+    /* if scope is global or local does not have this variable, get variable from global */
+    if (global_ret.first == STATE_OK_WITH_VALUE)
+    {
+        ret.second = global_ret.second;
+        goto THING_RETURN;
     }
     else
     {
-        print_error("\"THING\": Variable \"" + value + "\" not defined.");
         ret.first = STATE_ERROR;
+        print_error("\"THING\": Variable \"" + value + "\" not defined.");
         return ret;
     }
+
     
+THING_RETURN:
+    if (ret.second == "\"")
+    {
+        ret.second = "";
+    }
     ret.first = STATE_OK_WITH_VALUE;
 
     return ret;
 }
 
-type_of_return PRINT_processor()
+type_of_return PRINT_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
-    type_of_return argument_ret = get_value();
+    type_of_return argument_ret = get_value(map_of_local_variable);
     string value = "";
     if (argument_ret.first == STATE_OK_WITH_VALUE)
     {
@@ -380,10 +443,10 @@ type_of_return PRINT_processor()
     return ret;
 }
 
-type_of_return READLIST_processor()
+type_of_return READLIST_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    type_of_return list_ret = get_list();
+    type_of_return list_ret = get_list(map_of_local_variable);
     if (list_ret.first == STATE_OK_WITH_VALUE) {
         ret.first = STATE_OK_WITH_VALUE;
         ret.second = list_ret.second;
@@ -396,11 +459,11 @@ type_of_return READLIST_processor()
     return ret;
 }
 
-type_of_return AND_processor()
+type_of_return AND_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     
-    type_of_return first_argument_ret = get_bool();
+    type_of_return first_argument_ret = get_bool(map_of_local_variable);
     if (first_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"AND\": Invalid first argument, should be a bool value.");
@@ -408,7 +471,7 @@ type_of_return AND_processor()
         return ret;
     }
 
-    type_of_return second_argument_ret = get_bool();
+    type_of_return second_argument_ret = get_bool(map_of_local_variable);
     if (second_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"AND\": Invalid second argument, should be a bool value.");
@@ -428,11 +491,11 @@ type_of_return AND_processor()
     return ret;
 }
 
-type_of_return OR_processor()
+type_of_return OR_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     
-    type_of_return first_argument_ret = get_bool();
+    type_of_return first_argument_ret = get_bool(map_of_local_variable);
     if (first_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"OR\": Invalid first argument, should be a bool value.");
@@ -440,7 +503,7 @@ type_of_return OR_processor()
         return ret;
     }
     
-    type_of_return second_argument_ret = get_bool();
+    type_of_return second_argument_ret = get_bool(map_of_local_variable);
     if (second_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"OR\": Invalid second argument, should be a bool value.");
@@ -460,11 +523,11 @@ type_of_return OR_processor()
     return ret;
 }
 
-type_of_return NOT_processor()
+type_of_return NOT_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     
-    type_of_return argument_ret = get_bool();
+    type_of_return argument_ret = get_bool(map_of_local_variable);
     if (argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"NOT\": Invalid argument, should be a bool value.");
@@ -484,11 +547,11 @@ type_of_return NOT_processor()
     return ret;
 }
 
-type_of_return IF_processor()
+type_of_return IF_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     
-    type_of_return argument_ret = get_bool();
+    type_of_return argument_ret = get_bool(map_of_local_variable);
     if (argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"IF\": Invalid first argument, should be a bool value.");
@@ -498,7 +561,7 @@ type_of_return IF_processor()
     
     if (argument_ret.second == "TRUE")
     {
-        main_processor();
+        main_processor(map_of_variable);
         if (skip_list() == STATE_ERROR)
         {
             print_error("\"IF\": Invalid third argument, should be a list.");
@@ -510,17 +573,17 @@ type_of_return IF_processor()
         {
             print_error("\"IF\": Invalid second argument, should be a list.");
         }
-        main_processor();
+        main_processor(map_of_variable);
     }
     
     return ret;
 }
 
-type_of_return REPEAT_processor()
+type_of_return REPEAT_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     
-    type_of_return argument_ret = get_number();
+    type_of_return argument_ret = get_number(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE)
     {
         int repeat = (int)atof(argument_ret.second.c_str());
@@ -529,7 +592,7 @@ type_of_return REPEAT_processor()
         for (ri = 1; ri <= repeat; ++ri)
         {
             rollback_input_to_position(input_position);
-            main_processor();
+            main_processor(map_of_variable);
         }
     }
     else
@@ -541,11 +604,11 @@ type_of_return REPEAT_processor()
     return ret;
 }
 
-type_of_return RANDOM_processor()
+type_of_return RANDOM_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     
-    type_of_return argument_ret = get_number();
+    type_of_return argument_ret = get_number(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
         int rand_max = (int)atof(argument_ret.second.c_str());
         int rand_num = rand() % rand_max;
@@ -560,10 +623,10 @@ type_of_return RANDOM_processor()
     return ret;
 }
 
-type_of_return SQRT_processor()
+type_of_return SQRT_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    type_of_return argument_ret = get_number();
+    type_of_return argument_ret = get_number(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
         ret.first = STATE_OK_WITH_VALUE;
         double number = atof(argument_ret.second.c_str());
@@ -578,10 +641,10 @@ type_of_return SQRT_processor()
     return ret;
 }
 
-type_of_return INT_processor()
+type_of_return INT_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    type_of_return argument_ret = get_number();
+    type_of_return argument_ret = get_number(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
         ret.first = STATE_OK_WITH_VALUE;
         int number = (int)atof(argument_ret.second.c_str());
@@ -595,10 +658,10 @@ type_of_return INT_processor()
     return ret;
 }
 
-type_of_return NUMBERP_processor()
+type_of_return NUMBERP_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    type_of_return argument_ret = get_value();
+    type_of_return argument_ret = get_value(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
         if (is_number(argument_ret.second))
         {
@@ -617,10 +680,10 @@ type_of_return NUMBERP_processor()
     return ret;
 }
 
-type_of_return WORDP_processor()
+type_of_return WORDP_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    type_of_return argument_ret = get_value();
+    type_of_return argument_ret = get_value(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
         if (is_word(argument_ret.second))
         {
@@ -639,10 +702,10 @@ type_of_return WORDP_processor()
     return ret;
 }
 
-type_of_return LISTP_processor()
+type_of_return LISTP_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    type_of_return argument_ret = get_value();
+    type_of_return argument_ret = get_value(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
         if (is_list(argument_ret.second))
         {
@@ -661,11 +724,11 @@ type_of_return LISTP_processor()
     return ret;
 }
 
-type_of_return EQUALP_processor()
+type_of_return EQUALP_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     
-    type_of_return first_argument_ret = get_value();
+    type_of_return first_argument_ret = get_value(map_of_local_variable);
     if (first_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"EQUALP\": Invalid first argument, should be a value.");
@@ -673,7 +736,7 @@ type_of_return EQUALP_processor()
         return ret;
     }
     
-    type_of_return second_argument_ret = get_value();
+    type_of_return second_argument_ret = get_value(map_of_local_variable);
     if (second_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"EQUALP\": Invalid second argument, should be a value.");
@@ -693,12 +756,12 @@ type_of_return EQUALP_processor()
     return ret;
 }
 
-type_of_return NAMEP_processor()
+type_of_return NAMEP_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    type_of_return argument_ret = get_word();
+    type_of_return argument_ret = get_word(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
-        type_of_return variable_ret = get_variable(argument_ret.second);
+        type_of_return variable_ret = get_variable(map_of_local_variable, argument_ret.second);
         if (variable_ret.first == STATE_OK_WITH_VALUE)
         {
             ret.second = "TRUE";
@@ -716,11 +779,11 @@ type_of_return NAMEP_processor()
     return ret;
 }
 
-type_of_return WORD_processor()
+type_of_return WORD_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     
-    type_of_return first_argument_ret = get_word();
+    type_of_return first_argument_ret = get_word(map_of_local_variable);
     if (first_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"WORD\": Invalid first argument, should be a word.");
@@ -728,7 +791,7 @@ type_of_return WORD_processor()
         return ret;
     }
     
-    type_of_return second_argument_ret = get_word();
+    type_of_return second_argument_ret = get_word(map_of_local_variable);
     if (second_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"WORD\": Invalid second argument, should be a word.");
@@ -741,11 +804,11 @@ type_of_return WORD_processor()
     return ret;
 }
 
-type_of_return SENTENCE_processor()
+type_of_return SENTENCE_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
     
-    type_of_return first_argument_ret = get_value();
+    type_of_return first_argument_ret = get_value(map_of_local_variable);
     if (first_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"SENTENCE\": Invalid first argument, should be a value.");
@@ -753,7 +816,7 @@ type_of_return SENTENCE_processor()
         return ret;
     }
     
-    type_of_return second_argument_ret = get_value();
+    type_of_return second_argument_ret = get_value(map_of_local_variable);
     if (second_argument_ret.first != STATE_OK_WITH_VALUE)
     {
         print_error("\"SENTENCE\": Invalid second argument, should be a value.");
@@ -766,10 +829,10 @@ type_of_return SENTENCE_processor()
     return ret;
 }
 
-type_of_return FIRST_processor()
+type_of_return FIRST_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    type_of_return argument_ret = get_value();
+    type_of_return argument_ret = get_value(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
         if (is_list(argument_ret.second))
         {
@@ -797,11 +860,10 @@ type_of_return FIRST_processor()
     return ret;
 }
 
-// TODO
-type_of_return BUTFIRST_processor()
+type_of_return BUTFIRST_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
-    type_of_return argument_ret = get_value();
+    type_of_return argument_ret = get_value(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
         if (is_list(argument_ret.second))
         {
@@ -837,44 +899,83 @@ type_of_return BUTFIRST_processor()
 }
 
 // TODO
-type_of_return TO_processor()
+type_of_return TO_processor(type_of_variable_map &map_of_local_variable)
+{
+    type_of_return ret(STATE_OK_WITH_VALUE, "");
+    type_of_return argument_ret = get_word(map_of_local_variable);
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        vector<string> parameters;
+        string left_parenthesis = get_input();
+        if (left_parenthesis != "[") {
+            print_error("\"TO\": Invalid second argument, should be a parameter list.");
+            ret.first = STATE_ERROR;
+            return ret;
+        }
+        while (true)
+        {
+            string parameter = get_input();
+            if (parameter == "]")
+            {
+                break;
+            }
+            if (!is_word(parameter))
+            {
+                print_error("\"TO\": Invalid second argument, should be a parameter list.");
+                ret.first = STATE_ERROR;
+                return ret;
+            }
+            parameters.push_back(parameter);
+        }
+        
+        int start = 0;
+        start = get_input_position();
+        string command;
+        do {
+            command = get_input();
+        } while (command != "END");
+        
+        set_function(argument_ret.second, parameters, start);
+    }
+    else
+    {
+        print_error("\"TO\": Invalid first argument, should be a word.");
+        ret.first = STATE_ERROR;
+    }
+    return ret;
+}
+
+// TODO
+type_of_return OUTPUT_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     return ret;
 }
 
 // TODO
-type_of_return OUTPUT_processor()
+type_of_return STOP_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     return ret;
 }
 
 // TODO
-type_of_return STOP_processor()
+type_of_return ERASE_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     return ret;
 }
 
 // TODO
-type_of_return ERASE_processor()
+type_of_return ERASEALL_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     return ret;
 }
 
-// TODO
-type_of_return ERASEALL_processor()
+type_of_return WAIT_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
-    return ret;
-}
-
-type_of_return WAIT_processor()
-{
-    type_of_return ret(STATE_OK, "");
-    type_of_return argument_ret = get_number();
+    type_of_return argument_ret = get_number(map_of_local_variable);
     if (argument_ret.first == STATE_OK_WITH_VALUE) {
         ret.first = STATE_OK;
         /* 1 microsecond equals to 1x10E-6 second. */
@@ -891,20 +992,20 @@ type_of_return WAIT_processor()
 }
 
 // TODO
-type_of_return LOAD_processor()
+type_of_return LOAD_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     return ret;
 }
 
 // TODO
-type_of_return SAVE_processor()
+type_of_return SAVE_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     return ret;
 }
 
-type_of_return SEPARATOR_processor()
+type_of_return SEPARATOR_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     /* yep it does nothing. */
@@ -913,7 +1014,7 @@ type_of_return SEPARATOR_processor()
 
 /*
 // TODO
-type_of_return VOID_processor()
+type_of_return VOID_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     return ret;

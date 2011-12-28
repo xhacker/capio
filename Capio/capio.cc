@@ -5,6 +5,8 @@
 
 using namespace std;
 
+extern type_of_variable_map map_of_variable;
+
 int main()
 {
 	print_info("Hello, I am a CapIO LOGO interpreter.");
@@ -15,7 +17,7 @@ int main()
 
     init_command();
     init_variable();
-    main_processor();
+    main_processor(map_of_variable);
 	
     print_br();
     print_info("Bye!");
