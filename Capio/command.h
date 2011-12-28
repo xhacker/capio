@@ -20,7 +20,8 @@ type_of_return get_number(type_of_variable_map &);
 type_of_return get_bool(type_of_variable_map &);
 type_of_return get_value(type_of_variable_map &);
 
-void main_processor(type_of_variable_map &);
+string main_processor(type_of_variable_map &);
+string function_processor(type_of_variable_map &, type_of_function, string);
 
 type_of_return MAKE_processor(type_of_variable_map &);
 type_of_return THING_processor(type_of_variable_map &);

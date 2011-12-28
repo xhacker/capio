@@ -20,5 +20,6 @@ typedef pair<type_of_state, string> type_of_return;
 #define STATE_EOF 1
 #define STATE_ERROR 2
 #define STATE_OK_WITH_VALUE 100
+#define STATE_OK_WITH_OUTPUT 200
 
 #endif

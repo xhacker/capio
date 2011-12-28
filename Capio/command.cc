@@ -213,8 +213,10 @@ type_of_return get_value(type_of_variable_map &map_of_local_variable)
     return ret;
 }
 
-void main_processor(type_of_variable_map &map_of_local_variable)
+string main_processor(type_of_variable_map &map_of_local_variable)
 {
+    string ret = "";
+    
     string stop_flag = "";
     string start_flag = "";
     start_flag = get_input();
@@ -233,54 +235,86 @@ void main_processor(type_of_variable_map &map_of_local_variable)
         
         if (command == stop_flag || command == "END")
         {
-            return;
+            break;
         }
         
-        type_of_command_function command_processor = find_command(command);
-        type_of_function_return func_ret = get_function(command);
-        if (command_processor)
+        if (command == "OUTPUT")
         {
-            command_processor(map_of_local_variable);
-        }
-        else if (func_ret.first == STATE_OK_WITH_VALUE)
-        {
-            type_of_variable_map new_map_of_local_variable;
-            int argi;
-            bool arg_valid = true;
-            for (argi = 0; argi != func_ret.second.parameters.size(); ++argi)
+            type_of_return output_ret = get_value(map_of_local_variable);
+            if (output_ret.first == STATE_OK_WITH_VALUE)
             {
-                type_of_return parameter = get_value(map_of_local_variable);
-                if (parameter.first == STATE_OK_WITH_VALUE)
-                {
-                    new_map_of_local_variable.insert(type_of_variable(
-                        func_ret.second.parameters[argi],
-                        parameter.second));
-                }
-                else
-                {
-                    print_error("\"" + command + "\": Invalid argument.");
-                    arg_valid = false;
-                    break;
-                }
+                ret = output_ret.second;
+                //print_log("RETURN: " + ret);
             }
-            
-            if (arg_valid)
+            else
             {
-                print_log("Entering function...");
-                
-                int current_position = get_input_position();
-                rollback_input_to_position(func_ret.second.start_position);
-                main_processor(new_map_of_local_variable);
-                rollback_input_to_position(current_position);
-                
-                print_log("Exiting function...");
+                print_error("\"OUTPUT\": Invalid argument, should be a value.");
             }
         }
         else
         {
-            print_error("\"" + command + "\" is not a valid command.");
+            type_of_command_function command_processor = find_command(command);
+            type_of_function_return func_ret = get_function(command);
+            if (command_processor)
+            {
+                type_of_return command_ret = command_processor(map_of_local_variable);
+                if (command_ret.first == STATE_OK_WITH_OUTPUT)
+                {
+                    ret = command_ret.second;
+                }
+            }
+            else if (func_ret.first == STATE_OK_WITH_VALUE)
+            {
+                function_processor(map_of_local_variable, func_ret.second, command);
+            }
+            else
+            {
+                print_error("\"" + command + "\" is not a valid command.");
+            }
         }
     }
+    
+    return ret;
+}
+
+string function_processor(type_of_variable_map &map_of_local_variable, type_of_function func, string func_name)
+{
+    string ret = "";
+    
+    type_of_variable_map new_map_of_local_variable;
+    int argi;
+    bool arg_valid = true;
+    for (argi = 0; argi != func.parameters.size(); ++argi)
+    {
+        type_of_return parameter = get_value(map_of_local_variable);
+        if (parameter.first == STATE_OK_WITH_VALUE)
+        {
+            new_map_of_local_variable.insert(type_of_variable(
+                func.parameters[argi],
+                parameter.second));
+        }
+        else
+        {
+            print_error("\"" + func_name + "\": Invalid argument.");
+            arg_valid = false;
+            break;
+        }
+    }
+    
+    if (arg_valid)
+    {
+        //print_log("Entering function...");
+        
+        int current_position = get_input_position();
+        rollback_input_to_position(func.start_position);
+        ret = main_processor(new_map_of_local_variable);
+        rollback_input_to_position(current_position);
+        
+        //print_log("Exiting function...");
+    }
+    
+    
+    return ret;
 }
 
 type_of_return MAKE_processor(type_of_variable_map &map_of_local_variable)
@@ -343,7 +377,7 @@ type_of_return MAKE_processor(type_of_variable_map &map_of_local_variable)
         /* if scope is local but local does not have this variable, use global */
         set_variable(map_of_variable, name, value);
     }
-    print_log("MAKE: " + name + " = " + value);
+    //print_log("MAKE: " + name + " = " + value);
 
     ret.first = STATE_OK;
     return ret;
@@ -561,7 +595,12 @@ type_of_return IF_processor(type_of_variable_map &map_of_local_variable)
     
     if (argument_ret.second == "TRUE")
     {
-        main_processor(map_of_variable);
+        string ret_value = main_processor(map_of_local_variable);
+        if (ret_value != "")
+        {
+            ret.first = STATE_OK_WITH_OUTPUT;
+            ret.second = ret_value;
+        }
         if (skip_list() == STATE_ERROR)
         {
             print_error("\"IF\": Invalid third argument, should be a list.");
@@ -573,7 +612,12 @@ type_of_return IF_processor(type_of_variable_map &map_of_local_variable)
         {
             print_error("\"IF\": Invalid second argument, should be a list.");
         }
-        main_processor(map_of_variable);
+        string ret_value = main_processor(map_of_local_variable);
+        if (ret_value != "")
+        {
+            ret.first = STATE_OK_WITH_OUTPUT;
+            ret.second = ret_value;
+        }
     }
     
     return ret;
@@ -592,7 +636,12 @@ type_of_return REPEAT_processor(type_of_variable_map &map_of_local_variable)
         for (ri = 1; ri <= repeat; ++ri)
         {
             rollback_input_to_position(input_position);
-            main_processor(map_of_variable);
+            string ret_value = main_processor(map_of_local_variable);
+            if (ret_value != "")
+            {
+                ret.first = STATE_OK_WITH_OUTPUT;
+                ret.second = ret_value;
+            }
         }
     }
     else

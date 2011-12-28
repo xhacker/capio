@@ -111,26 +111,27 @@ PRINT BUTFIRST [ ] PRINT BUTFIRST "iPod PRINT BUTFIRST [ 3 "one 4 "one 6 ] ;
 TO "miao [ ] PRINT "mew END miao ;
 = mew
 
+TO "STOP_test [ a ] IF :a > 0 [ STOP ] [ ] PRINT "mew END STOP_test 0 STOP_test 1 ;
+= mew
+
 PRINT "add1 TO "add1 [ a b ] MAKE "a :a + 1 PRINT :a + :b END add1 33 66 ;
 = add1
 = 100
 
 TO "fib [ n ]
-    IF :n < 3 [ OUTPUT 1 ] [
-        MAKE "a fib :n - 1
-        MAKE "b fib :n - 2
-        OUTPUT :a + :b
+    IF :n < 2 [ OUTPUT :n ] [
+        MAKE "a fib :n - 2
+        MAKE "b fib :n - 1
+        MAKE "ret :a + :b
+        OUTPUT :ret
     ]
 END
 MAKE "i 5
 REPEAT 3 [
     PRINT fib :i
     MAKE "i :i + 1
-]
+] ;
 # 1, 1, 2, 3, 5, 8, 13, ...
 = 5
 = 8
 = 13
-
-
-

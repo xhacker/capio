@@ -98,12 +98,8 @@ type_of_return calc(type_of_variable_map &map_of_local_variable)
         else
         {
             type_of_command_function command_processor = find_command(elem);
-            if (command_processor == NULL)
-            {
-                ret.first = STATE_ERROR;
-                break;
-            }
-            else
+            type_of_function_return func_ret = get_function(elem);
+            if (command_processor)
             {
                 type_of_return command_ret = command_processor(map_of_local_variable);
                 if (command_ret.first == STATE_OK_WITH_VALUE)
@@ -115,6 +111,22 @@ type_of_return calc(type_of_variable_map &map_of_local_variable)
                     ret.first = STATE_ERROR;
                     break;
                 }
+            }
+            else if (func_ret.first == STATE_OK_WITH_VALUE)
+            {
+                string ret_value = function_processor(map_of_local_variable, func_ret.second, elem);
+                if (ret_value != "")
+                {
+                    elem_list.push_back(ret_value);
+                }
+                else
+                {
+                    print_error("\"" + elem + "\" has no return value.");
+                }
+            }
+            else
+            {
+                print_error("\"" + elem + "\" is not a valid command.");
             }
         }
  
