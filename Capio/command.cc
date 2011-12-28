@@ -38,8 +38,6 @@ void init_command()
     map_of_builtin_command.insert(type_of_command("FIRST", FIRST_processor));
     map_of_builtin_command.insert(type_of_command("BUTFIRST", BUTFIRST_processor));
     map_of_builtin_command.insert(type_of_command("TO", TO_processor));
-    map_of_builtin_command.insert(type_of_command("OUTPUT", OUTPUT_processor));
-    map_of_builtin_command.insert(type_of_command("STOP", STOP_processor));
     map_of_builtin_command.insert(type_of_command("ERASE", ERASE_processor));
     map_of_builtin_command.insert(type_of_command("ERASEALL", ERASEALL_processor));
     map_of_builtin_command.insert(type_of_command("WAIT", WAIT_processor));
@@ -947,7 +945,6 @@ type_of_return BUTFIRST_processor(type_of_variable_map &map_of_local_variable)
     return ret;
 }
 
-// TODO
 type_of_return TO_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK_WITH_VALUE, "");
@@ -993,24 +990,18 @@ type_of_return TO_processor(type_of_variable_map &map_of_local_variable)
     return ret;
 }
 
-// TODO
-type_of_return OUTPUT_processor(type_of_variable_map &map_of_local_variable)
-{
-    type_of_return ret(STATE_OK, "");
-    return ret;
-}
-
-// TODO
-type_of_return STOP_processor(type_of_variable_map &map_of_local_variable)
-{
-    type_of_return ret(STATE_OK, "");
-    return ret;
-}
-
-// TODO
 type_of_return ERASE_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
+    type_of_return argument_ret = get_word(map_of_local_variable);
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        remove_variable(map_of_local_variable, argument_ret.second);
+    }
+    else
+    {
+        print_error("\"ERASE\": Invalid argument, should be a word.");
+        ret.first = STATE_ERROR;
+    }
     return ret;
 }
 

@@ -19,5 +19,6 @@ void set_variable(type_of_variable_map &, string, string);
 void set_function(string, vector<string>, int);
 type_of_return get_variable(type_of_variable_map &, string);
 type_of_function_return get_function(string);
+void remove_variable(type_of_variable_map &, string);
 
 #endif

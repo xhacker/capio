@@ -73,3 +73,9 @@ type_of_function_return get_function(string name)
     ret.second = it->second;
     return ret;
 }
+
+void remove_variable(type_of_variable_map &map_of_local_variable, string name)
+{    
+    map_of_local_variable.erase(name);
+    map_of_variable.erase(name);
+}

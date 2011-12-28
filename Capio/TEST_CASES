@@ -118,20 +118,33 @@ PRINT "add1 TO "add1 [ a b ] MAKE "a :a + 1 PRINT :a + :b END add1 33 66 ;
 = add1
 = 100
 
-TO "fib [ n ]
+# warning: there is no local variable except the parameters
+TO "fib [ n a b ]
     IF :n < 2 [ OUTPUT :n ] [
-        MAKE "a fib :n - 2
-        MAKE "b fib :n - 1
-        MAKE "ret :a + :b
-        OUTPUT :ret
+        MAKE "a fib :n - 2 :foo :bar
+        MAKE "b fib :n - 1 :foo :bar
+        OUTPUT :a + :b
     ]
 END
-MAKE "i 5
+MAKE "i 5 MAKE "foo 0 MAKE "bar 0
 REPEAT 3 [
-    PRINT fib :i
+    PRINT fib :i :foo :bar
     MAKE "i :i + 1
 ] ;
 # 1, 1, 2, 3, 5, 8, 13, ...
 = 5
 = 8
 = 13
+
+# ERASE
+MAKE "a 100 PRINT :a ERASE "a PRINT :a ;
+= 100
+= <error>
+
+
+
+
+
+
+
+

@@ -45,8 +45,6 @@ type_of_return SENTENCE_processor(type_of_variable_map &);
 type_of_return FIRST_processor(type_of_variable_map &);
 type_of_return BUTFIRST_processor(type_of_variable_map &);
 type_of_return TO_processor(type_of_variable_map &);
-type_of_return OUTPUT_processor(type_of_variable_map &);
-type_of_return STOP_processor(type_of_variable_map &);
 type_of_return ERASE_processor(type_of_variable_map &);
 type_of_return ERASEALL_processor(type_of_variable_map &);
 type_of_return WAIT_processor(type_of_variable_map &);
