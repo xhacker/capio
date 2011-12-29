@@ -24,6 +24,10 @@ int is_operator(string op)
     {
         return OP_DIVIDE;
     }
+    else if (op == "%")
+    {
+        return OP_REMAIN;
+    }
     else if (op == "=")
     {
         return OP_EQUAL;
@@ -230,6 +234,10 @@ string do_operate(type_of_return a, string op, type_of_return b)
     else if (op == "/")
     {
         result = num_to_string(aval / bval);
+    }
+    else if (op == "%")
+    {
+        result = num_to_string((int)aval % (int)bval);
     }
     else if (op == "=")
     {

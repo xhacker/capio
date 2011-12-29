@@ -12,8 +12,9 @@
 #define OP_MORE     13
 #define OP_ADD      21
 #define OP_MINUS    22
-#define OP_MULTI    23
-#define OP_DIVIDE   24
+#define OP_REMAIN   23
+#define OP_MULTI    24
+#define OP_DIVIDE   25
 
 #define NOT_PARENTHESIS 0
 #define PARENTHESIS_L   1

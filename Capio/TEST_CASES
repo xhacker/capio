@@ -188,5 +188,19 @@ LOAD "fib PRINT :A PRINT fib 10 ;
 = 55
 
 
+# BIG CASES
+
+TO "gcd [ a b ]
+    IF :b = 0
+        [ OUTPUT :a ]
+        [ OUTPUT gcd :b :a % :b ]
+END
+PRINT gcd 66 99 ;
+= 33
+
+
+
+
+
 
 
