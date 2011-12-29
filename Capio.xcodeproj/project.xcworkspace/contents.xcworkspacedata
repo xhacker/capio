@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../Capio/MAKEFILE">
+   </FileRef>
+   <FileRef
       location = "group:../Capio/TEST_CASES">
    </FileRef>
    <FileRef

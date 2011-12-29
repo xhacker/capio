@@ -280,7 +280,7 @@ string function_processor(type_of_variable_map &map_of_local_variable, type_of_f
     string ret = "";
     
     type_of_variable_map new_map_of_local_variable;
-    int argi;
+    unsigned argi;
     bool arg_valid = true;
     for (argi = 0; argi != func.parameters.size(); ++argi)
     {
@@ -927,7 +927,7 @@ type_of_return BUTFIRST_processor(type_of_variable_map &map_of_local_variable)
             else
             {
                 /* 0 should be '[', 1 should be ' '. */
-                int i = 0;
+                unsigned i = 0;
                 for (i = 2; i != argument_ret.second.size(); ++i)
                 {
                     if (argument_ret.second[i] == ' ')

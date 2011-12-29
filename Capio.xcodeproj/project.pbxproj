@@ -40,6 +40,7 @@
 		1ABF476E145E3D2400ED9E28 /* common.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = common.cc; sourceTree = "<group>"; };
 		1ABF476F145E3D2400ED9E28 /* io.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = io.cc; sourceTree = "<group>"; };
 		1ABF4771145E3D2400ED9E28 /* variable.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = variable.cc; sourceTree = "<group>"; };
+		1AC30EC014AC11890026E488 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +73,7 @@
 		1ABF475B145E3CB500ED9E28 /* Capio */ = {
 			isa = PBXGroup;
 			children = (
+				1AC30EC014AC11890026E488 /* makefile */,
 				1A8CDAA814A20309000F8112 /* calculate.cc */,
 				1A8CDAAA14A2033A000F8112 /* calculate.h */,
 				1ABF476B145E3D2400ED9E28 /* capio.cc */,

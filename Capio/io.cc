@@ -5,7 +5,7 @@
 #include "common.h"
 
 vector<string> input_buf;
-int input_buf_pos = 0;
+unsigned input_buf_pos = 0;
 
 string get_input()
 {
