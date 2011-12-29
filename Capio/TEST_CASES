@@ -20,17 +20,7 @@ PRINT 5 * ( 3 + 3 ) ;
 PRINT ( 2 + 3 ) * ( ( 4 + 5 ) - 8 ) ;
 = 5
 
-# Variable
-
-MAKE "A 100 ;
-MAKE "B :A + 100 ;
-PRINT :B ;
-= 200
-MAKE "C "miao
-PRINT THING "C ;
-= miao
-
-# Bool
+## Bool
 PRINT AND 100 > 99 70 + 30 = 100 ;
 = TRUE
 PRINT AND 100 > 99 70 + 30 < 100 ;
@@ -42,64 +32,101 @@ PRINT NOT THING "A = 103 ;
 = FALSE
 
 
+# MAKE & THING
 
+MAKE "A 100 ;
+MAKE "B :A + 100 ;
+PRINT :B ;
+= 200
+
+MAKE "C "miao
+PRINT THING "C ;
+= miao
 
 
 # READLIST
+
 MAKE "A READLIST [ 1 2 3 "four ] PRINT :A ;
 = [ 1 2 3 four ]
 
+
 # IF
+
 IF 2 < 3 [ PRINT "Right. ] [ PRINT "Wrong. ] ;
 = Right.
+
 IF 4 * 4 < 3 * 3 [ MAKE "ret "Wrong. ] [ MAKE "ret "Right. ] PRINT :ret ;
 = Right.
 
+
 # REPEAT
+
 PRINT "Before REPEAT 3 [ PRINT "Repeating(3)... WAIT 1000000 ] PRINT "After ;
 
+
 # NUMBERP
+
 MAKE "A 100.1 PRINT NUMBERP :A ;
 = TRUE
+
 PRINT NUMBERP "hello ;
 = FALSE
 
+
 # WORDP
+
 PRINT WORDP "miao ;
 = TRUE
+
 PRINT WORDP 333.33 ;
 = FALSE
 
+
 # LISTP
+
 PRINT LISTP [ 1 2 ] ;
 = TRUE
 
+
 # EQUALP
+
 MAKE "A 100 PRINT EQUALP :A 100 ;
 = TRUE
+
 PRINT EQUALP "miao "mew ;
 = FALSE
 
+
 # NAMEP
+
 MAKE "A 100 PRINT NAMEP "A PRINT NAMEP "B ;
 = TRUE
 = FALSE
 
+
 # WORD
+
 MAKE "A "miao MAKE "B "mew PRINT WORD :A :B ;
 = miaomew
 
+
 # SENTENCE
+
 MAKE "A "hello PRINT SENTENCE :A "world ;
 = [ hello world ]
+
 MAKE "A "hello MAKE "B [ "i "am "an "array ] PRINT SENTENCE :A :B ;
 = [ hello [ i am an array ] ]
 
+
 # FIRST
+
 MAKE "A [ "mew "miao 123 ] PRINT FIRST :A ;
 = mew
 
+
 # BUTFIRST
+
 PRINT BUTFIRST [ ] PRINT BUTFIRST "iPod PRINT BUTFIRST [ 3 "one 4 "one 6 ] ;
 = [ ]
 = Pod
@@ -133,10 +160,11 @@ TO "print_fib [ ]
     ] ;
 END
 print_fib ;
-# 1, 1, 2, 3, 5, 8, 13, ...
+# 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...
 = 5
 = 8
 = 13
+
 
 # ERASE
 MAKE "a 100 PRINT :a ERASE "a PRINT :a ;
@@ -144,8 +172,20 @@ MAKE "a 100 PRINT :a ERASE "a PRINT :a ;
 = <error>
 
 
-
-
+# SAVE & LOAD
+TO "fib [ n ]
+    IF :n < 2 [ OUTPUT :n ] [
+        MAKE "a fib :n - 2
+        MAKE "b fib :n - 1
+        OUTPUT :a + :b
+    ]
+END
+MAKE "A 100 SAVE "fib PRINT "saved. ;
+= saved.
+<restart>
+LOAD "fib PRINT :A PRINT fib 10 ;
+= 100
+= 55
 
 
 

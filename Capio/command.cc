@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <cmath>
 #include <cstdlib>
@@ -1037,17 +1038,58 @@ type_of_return WAIT_processor(type_of_variable_map &map_of_local_variable)
     return ret;
 }
 
-// TODO
 type_of_return LOAD_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
+    type_of_return argument_ret = get_word(map_of_local_variable);
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        string filename = argument_ret.second;
+        ifstream file(filename.c_str());
+        if (file)
+        {
+            load_from_stream(file);
+            file.close();
+        }
+        else
+        {
+            print_error("\"LOAD\": Specified file not exist.");
+            ret.first = STATE_ERROR;
+        }
+    }
+    else
+    {
+        print_error("\"LOAD\": Invalid argument, should be a word.");
+        ret.first = STATE_ERROR;
+    }
     return ret;
 }
 
-// TODO
 type_of_return SAVE_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
+    
+    int current_position, save_end_position;
+    save_end_position = get_input_position() - 1;
+    type_of_return argument_ret = get_word(map_of_local_variable);
+    if (argument_ret.first == STATE_OK_WITH_VALUE) {
+        string filename = argument_ret.second;
+        ofstream file(filename.c_str(), ios::out);
+        
+        current_position = get_input_position();
+        rollback_input_to_position(0);
+        for (int i = 0; i < save_end_position; ++i)
+        {
+            file << get_input() << " ";
+        }
+        file.close();
+        rollback_input_to_position(current_position);
+    }
+    else
+    {
+        print_error("\"SAVE\": Invalid argument, should be a word.");
+        ret.first = STATE_ERROR;
+    }
+    
     return ret;
 }
 

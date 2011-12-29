@@ -6,6 +6,7 @@
 using namespace std;
 
 string get_input();
+void load_from_stream(ifstream &);
 void rollback_input();
 int get_input_position();
 void rollback_input_to_position(int);

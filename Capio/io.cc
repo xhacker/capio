@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include "io.h"
 #include "common.h"
@@ -34,6 +35,17 @@ string get_input()
     ++input_buf_pos;
 
     return ret;
+}
+
+void load_from_stream(ifstream &filestream)
+{
+    string elem = "";
+    filestream >> elem;
+    while (!filestream.eof())
+    {
+        input_buf.push_back(elem);
+        filestream >> elem;
+    }
 }
 
 void rollback_input()
