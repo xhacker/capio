@@ -363,17 +363,23 @@ type_of_return MAKE_processor(type_of_variable_map &map_of_local_variable)
         ;
     }
 
-    if (&map_of_local_variable == &map_of_variable ||
-        get_variable(map_of_local_variable, name).first == STATE_OK_WITH_VALUE)
+    if (get_variable(map_of_local_variable, name).first == STATE_OK_WITH_VALUE)
     {
-        /* if scope is global, use global */
-        /* if scope is local and local has this variable, use local */
+        /* if local has this variable, use local */
         set_variable(map_of_local_variable, name, value);
     }
     else
     {
-        /* if scope is local but local does not have this variable, use global */
-        set_variable(map_of_variable, name, value);
+        if (get_variable(map_of_variable, name).first == STATE_OK_WITH_VALUE)
+        {
+            /* local does not have this variable but global has, use global */
+            set_variable(map_of_variable, name, value);
+        }
+        else
+        {
+            /* both local and global do not have this variable, use local */
+            set_variable(map_of_local_variable, name, value);
+        }
     }
     //print_log("MAKE: " + name + " = " + value);
 
