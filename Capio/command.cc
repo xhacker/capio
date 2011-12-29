@@ -40,7 +40,6 @@ void init_command()
     map_of_builtin_command.insert(type_of_command("BUTFIRST", BUTFIRST_processor));
     map_of_builtin_command.insert(type_of_command("TO", TO_processor));
     map_of_builtin_command.insert(type_of_command("ERASE", ERASE_processor));
-    map_of_builtin_command.insert(type_of_command("ERASEALL", ERASEALL_processor));
     map_of_builtin_command.insert(type_of_command("WAIT", WAIT_processor));
     map_of_builtin_command.insert(type_of_command("LOAD", LOAD_processor));
     map_of_builtin_command.insert(type_of_command("SAVE", SAVE_processor));
@@ -1012,13 +1011,6 @@ type_of_return ERASE_processor(type_of_variable_map &map_of_local_variable)
     return ret;
 }
 
-// TODO
-type_of_return ERASEALL_processor(type_of_variable_map &map_of_local_variable)
-{
-    type_of_return ret(STATE_OK, "");
-    return ret;
-}
-
 type_of_return WAIT_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
@@ -1101,8 +1093,7 @@ type_of_return SEPARATOR_processor(type_of_variable_map &map_of_local_variable)
 }
 
 /*
-// TODO
-type_of_return VOID_processor(type_of_variable_map &map_of_local_variable)
+type_of_return FUZZY_processor(type_of_variable_map &map_of_local_variable)
 {
     type_of_return ret(STATE_OK, "");
     return ret;

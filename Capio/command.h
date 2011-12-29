@@ -46,7 +46,6 @@ type_of_return FIRST_processor(type_of_variable_map &);
 type_of_return BUTFIRST_processor(type_of_variable_map &);
 type_of_return TO_processor(type_of_variable_map &);
 type_of_return ERASE_processor(type_of_variable_map &);
-type_of_return ERASEALL_processor(type_of_variable_map &);
 type_of_return WAIT_processor(type_of_variable_map &);
 type_of_return LOAD_processor(type_of_variable_map &);
 type_of_return SAVE_processor(type_of_variable_map &);
