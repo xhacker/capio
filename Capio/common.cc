@@ -40,6 +40,7 @@ bool is_word(string str)
 {
     int point_count = 0;
     bool all_number = true;
+    bool has_digit = false;
     for (string::iterator iter = str.begin(); iter != str.end(); ++iter)
     {
         if (*iter == ' ')
@@ -56,11 +57,12 @@ bool is_word(string str)
         }
         else
         {
-            ;
+            // is digit
+            has_digit = true;
         }
     }
     
-    if (str.size() > 0 && all_number && point_count <= 1)
+    if (str.size() > 0 && all_number && has_digit && point_count <= 1)
     {
         return false;
     }

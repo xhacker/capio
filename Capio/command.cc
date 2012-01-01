@@ -647,6 +647,13 @@ type_of_return REPEAT_processor(type_of_variable_map &map_of_local_variable)
                 ret.second = ret_value;
             }
         }
+        if (repeat <= 0)
+        {
+            if (skip_list() == STATE_ERROR)
+            {
+                print_error("\"REPEAT\": Invalid second argument, should be a list.");
+            }
+        }
     }
     else
     {
@@ -1019,7 +1026,6 @@ type_of_return WAIT_processor(type_of_variable_map &map_of_local_variable)
         ret.first = STATE_OK;
         /* 1 microsecond equals to 1x10E-6 second. */
         int ms = (int)atof(argument_ret.second.c_str());
-        print_log("WAIT: " + num_to_string(ms) + " ms.");
         usleep(ms);
     }
     else

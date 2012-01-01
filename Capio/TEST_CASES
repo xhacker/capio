@@ -62,6 +62,11 @@ IF 4 * 4 < 3 * 3 [ MAKE "ret "Wrong. ] [ MAKE "ret "Right. ] PRINT :ret ;
 # REPEAT
 
 PRINT "Before REPEAT 3 [ PRINT "Repeating(3)... WAIT 1000000 ] PRINT "After ;
+= Before
+= Repeating(3) <pause>
+= Repeating(3) <pause>
+= Repeating(3) <pause>
+= After
 
 
 # NUMBERP
@@ -138,9 +143,6 @@ PRINT BUTFIRST [ ] PRINT BUTFIRST "iPod PRINT BUTFIRST [ 3 "one 4 "one 6 ] ;
 TO "miao [ ] PRINT "mew END miao ;
 = mew
 
-TO "STOP_test [ a ] IF :a > 0 [ STOP ] [ ] PRINT "mew END STOP_test 0 STOP_test 1 ;
-= mew
-
 PRINT "add1 TO "add1 [ a b ] MAKE "a :a + 1 PRINT :a + :b END add1 33 66 ;
 = add1
 = 100
@@ -188,7 +190,7 @@ LOAD "fib PRINT :A PRINT fib 10 ;
 = 55
 
 
-# BIG CASES
+# COMPLICATED CASES
 
 TO "gcd [ a b ]
     IF :b = 0
@@ -198,9 +200,38 @@ END
 PRINT gcd 66 99 ;
 = 33
 
+TO "hanoi [ from to tmp level ]
+    IF :level = 1
+    [ PRINT :from PRINT :to PRINT "-- ]
+    [
+        hanoi :from :tmp :to :level - 1
+        PRINT :from PRINT :to PRINT "--
+        hanoi :tmp :to :from :level - 1
+    ]
+END
+hanoi 1 3 2 3 ;
 
+TO "hanoi [ from to tmp level ]
+    IF :level = 1
+    [ ]
+    [
+        hanoi :from :tmp :to :level - 1
+        hanoi :tmp :to :from :level - 1
+    ]
+END
+hanoi 1 3 2 17 PRINT "done. ;
 
-
-
+TO "star [ m n ]
+    MAKE "dots ( :m - :n ) / 2
+    MAKE "str "
+    REPEAT :dots [ MAKE "str WORD :str ". ]
+    REPEAT :n [ MAKE "str WORD :str "* ]
+    REPEAT :dots [ MAKE "str WORD :str ". ]
+    PRINT :str
+END
+MAKE "i 1
+REPEAT 7 [ star 13 :i MAKE "i :i + 2 ]
+MAKE "i 13
+REPEAT 7 [ star 13 :i MAKE "i :i - 2 ] ;
 
 
